@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { Menu, X, MapPin, Navigation as NavigationIcon, Phone, Mail, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -9,10 +9,10 @@ import { EffectFade, Autoplay, Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import { aboutAPI, infoCardsAPI, eventsAPI, menuItemsAPI, heroButtonsAPI, imagesAPI, contactAPI } from '@/lib/api-client'
+import { aboutAPI, infoCardsAPI, eventsAPI, menuItemsAPI, heroButtonsAPI, imagesAPI, contactAPI, footerLinksAPI } from '@/lib/api-client'
 import { getIconComponent } from '@/lib/iconMapping'
 import { ZenPreloader } from '@/components/ZenPreloader'
+import { TiltCard } from '@/components/TiltCard'
 
 export default function HomePage() {
   const [aboutContent, setAboutContent] = useState<any>(null)
@@ -23,9 +23,15 @@ export default function HomePage() {
   const [heroImages, setHeroImages] = useState<any[]>([])
   const [galleryImages, setGalleryImages] = useState<any[]>([])
   const [contactInfo, setContactInfo] = useState<any[]>([])
+  const [footerLinks, setFooterLinks] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  // Parallax Logic
+  const { scrollY } = useScroll()
+  const heroTextY = useTransform(scrollY, [0, 500], [0, 200])
+  const heroBgY = useTransform(scrollY, [0, 500], [0, 100])
 
   useEffect(() => {
     loadContent()
@@ -41,7 +47,7 @@ export default function HomePage() {
 
   const loadContent = async () => {
     try {
-      const [about, cards, eventsData, menu, hero, heroImgs, galleryImgs, contact] = await Promise.all([
+      const [about, cards, eventsData, menu, hero, heroImgs, galleryImgs, contact, fLinks] = await Promise.all([
         aboutAPI.get(),
         infoCardsAPI.getAll(),
         eventsAPI.getAll(),
@@ -50,6 +56,7 @@ export default function HomePage() {
         imagesAPI.getByCategory('hero'),
         imagesAPI.getByCategory('gallery'),
         contactAPI.getAll(),
+        footerLinksAPI.getAll(),
       ])
 
       setAboutContent(about)
@@ -60,6 +67,7 @@ export default function HomePage() {
       setHeroImages(heroImgs)
       setGalleryImages(galleryImgs)
       setContactInfo(contact)
+      setFooterLinks(fLinks)
     } catch (error) {
       console.error('Error loading content:', error)
     } finally {
@@ -190,7 +198,7 @@ export default function HomePage() {
 
       {/* Hero Section with Image Carousel */}
       <header className="relative h-[85vh] min-h-[600px] overflow-hidden">
-        <div className="absolute inset-0">
+        <motion.div style={{ y: heroBgY }} className="absolute inset-0">
           {heroImages.length > 0 ? (
             <Swiper
               modules={[EffectFade, Autoplay, Navigation, Pagination]}
@@ -221,10 +229,11 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-black/30" />
             </div>
           )}
-        </div>
+        </motion.div>
 
         <div className="relative z-10 h-full flex items-center justify-center text-center px-6">
           <motion.div
+            style={{ y: heroTextY }}
             className="max-w-4xl"
             initial="hidden"
             animate="visible"
@@ -340,23 +349,23 @@ export default function HomePage() {
               {infoCards.map((card) => {
                 const IconComponent = getIconComponent(card.icon)
                 return (
-                  <motion.div
-                    key={card.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 30 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-                    }}
-                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                    className="p-8 rounded-2xl border border-ashram-amber/20 bg-ashram-sand/30 hover:bg-white hover:shadow-lg hover:border-ashram-amber/40 transition-all duration-300"
-                  >
-                    <div className="mb-6 p-4 bg-white rounded-xl w-fit shadow-sm border border-ashram-stone/5">
-                      <IconComponent className="w-8 h-8 text-ashram-amber" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-ashram-clay mb-3 font-serif">
-                      {card.title}
-                    </h3>
-                    <p className="text-ashram-stone leading-relaxed">{card.description}</p>
-                  </motion.div>
+                  <TiltCard key={card.id}>
+                    <motion.div
+                        variants={{
+                        hidden: { opacity: 0, y: 30 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+                        }}
+                        className="h-full p-8 rounded-2xl border border-ashram-amber/20 bg-ashram-sand/30 hover:bg-white hover:shadow-lg hover:border-ashram-amber/40 transition-all duration-300"
+                    >
+                        <div className="mb-6 p-4 bg-white rounded-xl w-fit shadow-sm border border-ashram-stone/5">
+                        <IconComponent className="w-8 h-8 text-ashram-amber" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-ashram-clay mb-3 font-serif">
+                        {card.title}
+                        </h3>
+                        <p className="text-ashram-stone leading-relaxed">{card.description}</p>
+                    </motion.div>
+                  </TiltCard>
                 )
               })}
             </motion.div>
@@ -505,19 +514,21 @@ export default function HomePage() {
                 </div>
               )}
 
-              {/* Map Placeholder Area */}
+              {/* Map Embed */}
               <motion.div
                 whileHover={{ scale: 1.01 }}
-                className="flex-1 min-h-[300px] rounded-3xl bg-ashram-sand/50 border-2 border-dashed border-ashram-stone/20 flex items-center justify-center relative overflow-hidden group cursor-pointer"
+                className="flex-1 min-h-[300px] rounded-3xl bg-ashram-sand overflow-hidden shadow-lg border border-ashram-stone/20 relative group"
               >
-                 <div className="absolute inset-0 bg-[url('https://www.google.com/maps/vt/data=LYENz1W1...')] bg-cover opacity-20 grayscale group-hover:grayscale-0 transition-all duration-700"/>
-                 <motion.div
-                    className="text-center z-10 bg-white/80 p-6 rounded-2xl backdrop-blur-sm shadow-sm"
-                    whileHover={{ y: -5 }}
-                 >
-                    <MapPin className="w-10 h-10 text-ashram-amber mx-auto mb-2" />
-                    <span className="text-ashram-clay font-bold">View Detailed Map</span>
-                 </motion.div>
+                 <iframe
+                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.6576343362677!2d73.0766288759535!3d22.253034944605156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fb092d6e35579%3A0x6280463b22337d5c!2sThe%20Art%20of%20Living%20Gujarat%20Ashram!5e0!3m2!1sen!2sin!4v1703000000000!5m2!1sen!2sin"
+                   width="100%"
+                   height="100%"
+                   style={{ border: 0, minHeight: '300px' }}
+                   allowFullScreen
+                   loading="lazy"
+                   referrerPolicy="no-referrer-when-downgrade"
+                   className="transition-all duration-700 w-full h-full"
+                 />
               </motion.div>
             </motion.div>
           </div>
@@ -633,10 +644,10 @@ export default function HomePage() {
             <div>
               <h4 className="font-bold text-lg mb-6 text-ashram-amber">Quick Links</h4>
               <ul className="space-y-3">
-                {['Meditation Hall', 'Programs', 'Donate', 'Volunteer'].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-ashram-sand/70 hover:text-white hover:translate-x-1 transition-all inline-block">
-                      {link}
+                {footerLinks.map((link: any, i: number) => (
+                  <li key={i}>
+                    <a href={link.url} className="text-ashram-sand/70 hover:text-white hover:translate-x-1 transition-all inline-block">
+                      {link.label}
                     </a>
                   </li>
                 ))}
@@ -647,18 +658,21 @@ export default function HomePage() {
             <div>
               <h4 className="font-bold text-lg mb-6 text-ashram-amber">Contact</h4>
               <ul className="space-y-3">
-                <li className="flex items-center gap-2 text-ashram-sand/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-ashram-amber" /> Call
-                </li>
-                 <li className="flex items-center gap-2 text-ashram-sand/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-ashram-amber" /> WhatsApp
-                </li>
-                 <li className="flex items-center gap-2 text-ashram-sand/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-ashram-amber" /> Email
-                </li>
-                 <li className="flex items-center gap-2 text-ashram-sand/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-ashram-amber" /> Map
-                </li>
+                 {contactInfo
+                    .filter((c: any) => c.type !== 'map' && c.type !== 'address' && c.isActive !== false)
+                    .map((contact: any, i: number) => (
+                    <li key={i} className="flex items-center gap-2 text-ashram-sand/70">
+                      <span className="w-1.5 h-1.5 rounded-full bg-ashram-amber" />
+                      <span className="font-medium text-white/90">{contact.label}:</span>
+                       {contact.type === 'phone' || contact.type === 'whatsapp' || contact.type === 'email' ? (
+                          <a href={contact.url || '#'} className="hover:text-ashram-amber transition-colors">
+                             {contact.value}
+                          </a>
+                       ) : (
+                          <span>{contact.value}</span>
+                       )}
+                    </li>
+                 ))}
               </ul>
             </div>
           </div>
