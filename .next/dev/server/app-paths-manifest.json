@@ -7,6 +7,9 @@
   "/api/footer-links/route": "app/api/footer-links/route.js",
   "/api/hero-buttons/route": "app/api/hero-buttons/route.js",
   "/api/images/by-category/[category]/route": "app/api/images/by-category/[category]/route.js",
+  "/api/images/delete/[id]/route": "app/api/images/delete/[id]/route.js",
+  "/api/images/reorder/route": "app/api/images/reorder/route.js",
+  "/api/images/upload/route": "app/api/images/upload/route.js",
   "/api/info-cards/route": "app/api/info-cards/route.js",
   "/api/menu-items/route": "app/api/menu-items/route.js",
   "/page": "app/page.js"

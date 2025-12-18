@@ -21,6 +21,7 @@ export default function HomePage() {
   const [menuItems, setMenuItems] = useState<any[]>([])
   const [heroButtons, setHeroButtons] = useState<any[]>([])
   const [heroImages, setHeroImages] = useState<any[]>([])
+  const [heroMobileImages, setHeroMobileImages] = useState<any[]>([]) // NEW
   const [galleryImages, setGalleryImages] = useState<any[]>([])
   const [contactInfo, setContactInfo] = useState<any[]>([])
   const [footerLinks, setFooterLinks] = useState<any[]>([])
@@ -47,13 +48,15 @@ export default function HomePage() {
 
   const loadContent = async () => {
     try {
-      const [about, cards, eventsData, menu, hero, heroImgs, galleryImgs, contact, fLinks] = await Promise.all([
+      const [about, cards, eventsData, menu, hero, heroImgs, heroMobileImgs, galleryImgs, contact, fLinks] = await Promise.all([
         aboutAPI.get(),
         infoCardsAPI.getAll(),
         eventsAPI.getAll(),
         menuItemsAPI.getAll(),
         heroButtonsAPI.getAll(),
+
         imagesAPI.getByCategory('hero'),
+        imagesAPI.getByCategory('hero-mobile'), // NEW
         imagesAPI.getByCategory('gallery'),
         contactAPI.getAll(),
         footerLinksAPI.getAll(),
@@ -65,6 +68,7 @@ export default function HomePage() {
       setMenuItems(menu)
       setHeroButtons(hero)
       setHeroImages(heroImgs)
+      setHeroMobileImages(heroMobileImgs)
       setGalleryImages(galleryImgs)
       setContactInfo(contact)
       setFooterLinks(fLinks)
@@ -217,35 +221,68 @@ export default function HomePage() {
       {/* Hero Section with Image Carousel */}
       <header className="relative h-[85vh] min-h-[600px] overflow-hidden">
         <motion.div style={{ y: heroBgY }} className="absolute inset-0">
-          {heroImages.length > 0 ? (
-            <Swiper
-              modules={[EffectFade, Autoplay, Navigation, Pagination]}
-              effect="fade"
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
-              navigation={false}
-              pagination={{ clickable: true, dynamicBullets: true }}
-              loop
-              className="h-full w-full"
-            >
-              {heroImages.map((img, i) => (
-                <SwiperSlide key={i}>
-                  <div className="relative w-full h-full">
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{
-                        backgroundImage: `url(${img.path})`,
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-black/30 mix-blend-multiply" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-ashram-clay to-ashram-stone">
-              <div className="absolute inset-0 bg-black/30" />
-            </div>
+          {/* Desktop Slider (Hidden on Mobile if Mobile Images exist) */}
+          <div className={`${heroMobileImages.length > 0 ? 'hidden md:block' : 'block'} h-full w-full`}>
+            {heroImages.length > 0 ? (
+              <Swiper
+                modules={[EffectFade, Autoplay, Navigation, Pagination]}
+                effect="fade"
+                autoplay={{ delay: 5000, disableOnInteraction: false }}
+                navigation={false}
+                pagination={{ clickable: true, dynamicBullets: true }}
+                loop
+                className="h-full w-full"
+              >
+                {heroImages.map((img, i) => (
+                  <SwiperSlide key={i}>
+                    <div className="relative w-full h-full">
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{
+                          backgroundImage: `url(${img.path})`,
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/30 mix-blend-multiply" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-ashram-clay to-ashram-stone">
+                <div className="absolute inset-0 bg-black/30" />
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Slider (Visible only on Mobile if images exist) */}
+          {heroMobileImages.length > 0 && (
+             <div className="md:hidden h-full w-full">
+               <Swiper
+                 modules={[EffectFade, Autoplay, Navigation, Pagination]}
+                 effect="fade"
+                 autoplay={{ delay: 5000, disableOnInteraction: false }}
+                 navigation={false}
+                 pagination={{ clickable: true, dynamicBullets: true }}
+                 loop
+                 className="h-full w-full"
+               >
+                 {heroMobileImages.map((img, i) => (
+                   <SwiperSlide key={i}>
+                     <div className="relative w-full h-full">
+                       <div
+                         className="absolute inset-0 bg-cover bg-center"
+                         style={{
+                           backgroundImage: `url(${img.path})`,
+                         }}
+                       />
+                       <div className="absolute inset-0 bg-black/30 mix-blend-multiply" />
+                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+                     </div>
+                   </SwiperSlide>
+                 ))}
+               </Swiper>
+             </div>
           )}
         </motion.div>
 

@@ -31,6 +31,25 @@ import {
   contactAPI,
   imagesAPI,
 } from "@/lib/api-client";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "@/lib/canvasUtils";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 // Type definitions
 interface MenuItem {
@@ -93,10 +112,11 @@ interface ContactInfo {
 
 interface Image {
   id: string;
+  category: string;
   filename: string;
   path: string;
-  category: string;
   alt?: string;
+  order: number; // NEW
 }
 
 // Type definitions for props
@@ -112,7 +132,11 @@ interface AboutEditorProps {
 
 interface ImageManagerProps {
   heroImages: Image[];
+  setHeroImages: React.Dispatch<React.SetStateAction<Image[]>>; // NEW
+  heroMobileImages: Image[]; // NEW
+  setHeroMobileImages: React.Dispatch<React.SetStateAction<Image[]>>; // NEW
   galleryImages: Image[];
+  setGalleryImages: React.Dispatch<React.SetStateAction<Image[]>>; // NEW
   onRefresh: () => void;
   onSave: () => Promise<void>;
   imagesToDelete: Set<string>;
@@ -151,6 +175,7 @@ const AdminDashboard = () => {
 
   // Images
   const [heroImages, setHeroImages] = useState<Image[]>([]);
+  const [heroMobileImages, setHeroMobileImages] = useState<Image[]>([]); // NEW
   const [galleryImages, setGalleryImages] = useState<Image[]>([]);
   const [imagesToDelete, setImagesToDelete] = useState<Set<string>>(new Set());
 
@@ -170,6 +195,7 @@ const AdminDashboard = () => {
         cardsData,
         contactData,
         heroImgs,
+        heroMobileImgs, // NEW
         galleryImgs,
       ] = await Promise.all([
         menuItemsAPI.getAll(),
@@ -180,6 +206,7 @@ const AdminDashboard = () => {
         infoCardsAPI.getAll(),
         contactAPI.getAll(),
         imagesAPI.getByCategory("hero"),
+        imagesAPI.getByCategory("hero-mobile"), // NEW
         imagesAPI.getByCategory("gallery"),
       ]);
 
@@ -190,8 +217,9 @@ const AdminDashboard = () => {
       setAboutContent(aboutData);
       setInfoCards(cardsData);
       setContactInfo(contactData);
-      setHeroImages(heroImgs);
-      setGalleryImages(galleryImgs);
+      setHeroImages(heroImgs.sort((a: Image, b: Image) => (a.order || 0) - (b.order || 0)));
+      setHeroMobileImages(heroMobileImgs.sort((a: Image, b: Image) => (a.order || 0) - (b.order || 0))); // NEW
+      setGalleryImages(galleryImgs.sort((a: Image, b: Image) => (a.order || 0) - (b.order || 0)));
     } catch (error) {
       console.error("Failed to load data:", error);
       setMessage("Failed to load some data from server");
@@ -259,22 +287,32 @@ const AdminDashboard = () => {
             );
             await Promise.all(deletePromises);
             setImagesToDelete(new Set());
-            await loadAllData();
-            success = true;
-          } else {
-            success = true;
           }
+
+          // Update image orders
+          const allImageUpdates = [
+            ...heroImages.map((img, index) => ({ id: Number(img.id), order: index })),
+            ...heroMobileImages.map((img, index) => ({ id: Number(img.id), order: index })),
+            ...galleryImages.map((img, index) => ({ id: Number(img.id), order: index }))
+          ];
+
+          if (allImageUpdates.length > 0) {
+             await imagesAPI.reorder(allImageUpdates);
+          }
+
+          await loadAllData(); // Reload all data to reflect changes
+          success = true;
           break;
       }
 
       if (success) {
-        setMessage(" Changes saved successfully!");
+        setMessage("✅ Changes saved successfully!");
         setTimeout(() => setMessage(""), 3000);
       } else {
-        setMessage(" Failed to save changes");
+        setMessage("❌ Failed to save changes");
       }
     } catch (error) {
-      setMessage(" Error: " + (error instanceof Error ? error.message : "Unknown error"));
+      setMessage("❌ Error: " + (error instanceof Error ? error.message : "Unknown error"));
     } finally {
       setLoading(false);
     }
@@ -328,19 +366,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Status Message */}
-        {message && (
-          <div
-            className={`mb-4 p-3 rounded-lg text-center ${
-              message.includes("✅")
-                ? "bg-green-100 text-green-700"
-                : message.includes("❌")
-                ? "bg-red-100 text-red-700"
-                : "bg-yellow-100 text-yellow-700"
-            }`}
-          >
-            {message}
-          </div>
-        )}
+
 
         {/* Tabs */}
         <div className="flex gap-2 mb-6 bg-white p-2 rounded-lg shadow-sm border flex-wrap">
@@ -402,7 +428,11 @@ const AdminDashboard = () => {
             {tab === "images" && (
               <ImageManager
                 heroImages={heroImages}
+                setHeroImages={setHeroImages}
+                heroMobileImages={heroMobileImages}
+                setHeroMobileImages={setHeroMobileImages}
                 galleryImages={galleryImages}
+                setGalleryImages={setGalleryImages}
                 onRefresh={loadAllData}
                 onSave={handleSave}
                 imagesToDelete={imagesToDelete}
@@ -421,6 +451,21 @@ const AdminDashboard = () => {
           >
             {loading ? "Saving..." : "Save Changes"}
           </Button>
+
+          {/* Status Message */}
+          {message && (
+             <div
+               className={`ml-4 px-4 py-2 rounded-lg flex items-center ${
+                 message.includes("✅")
+                   ? "bg-green-100 text-green-700 border border-green-200"
+                   : message.includes("❌")
+                   ? "bg-red-100 text-red-700 border border-red-200"
+                   : "bg-yellow-100 text-yellow-700 border border-yellow-200"
+               } animate-in fade-in slide-in-from-left-5`}
+             >
+               {message}
+             </div>
+          )}
         </div>
       </div>
     </div>
@@ -1200,16 +1245,204 @@ function ContactEditor({ items, setItems }: EditorProps<ContactInfo>) {
   );
 }
 
+
+
+// Image Cropper Modal
+function ImageCropper({
+  imageSrc,
+  aspectRatio,
+  onCancel,
+  onCropComplete,
+  uploading,
+}: {
+  imageSrc: string;
+  aspectRatio: number; // 16/9 or 9/16
+  onCancel: () => void;
+  onCropComplete: (croppedBlob: Blob) => void;
+  uploading: boolean;
+}) {
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+
+  const handleCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  };
+
+  const executeCrop = async () => {
+    try {
+      const croppedBlob = await getCroppedImg(imageSrc, croppedAreaPixels);
+      if (croppedBlob) {
+        onCropComplete(croppedBlob);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to crop image");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4">
+      <div className="bg-white rounded-xl overflow-hidden w-full max-w-5xl h-[85vh] flex flex-col shadow-2xl animate-in fade-in zoom-in duration-300">
+        <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+          <h3 className="font-bold text-lg flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+               <ImageIcon className="w-5 h-5" />
+            </div>
+            Adjust Image
+          </h3>
+          <Button variant="ghost" size="icon" onClick={onCancel}>
+            <X className="w-5 h-5 text-gray-500 hover:text-red-500 transition-colors" />
+          </Button>
+        </div>
+
+        <div className="relative flex-1 bg-neutral-900 overflow-hidden">
+          <Cropper
+            image={imageSrc}
+            crop={crop}
+            zoom={zoom}
+            aspect={aspectRatio}
+            showGrid={true}
+            onCropChange={setCrop}
+            onCropComplete={handleCropComplete}
+            onZoomChange={setZoom}
+          />
+        </div>
+
+        <div className="p-6 bg-white border-t space-y-6">
+          <div className="flex items-center gap-6 max-w-2xl mx-auto">
+             <span className="text-sm font-medium w-12 text-gray-600">Zoom</span>
+             <input
+               type="range"
+               value={zoom}
+               min={1}
+               max={3}
+               step={0.1}
+               aria-labelledby="Zoom"
+               onChange={(e) => setZoom(Number(e.target.value))}
+               className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-600"
+             />
+             <span className="text-center font-mono text-xs bg-gray-100 px-2 py-1 rounded w-12">{zoom.toFixed(1)}x</span>
+          </div>
+          <div className="flex justify-between items-center bg-orange-50 p-4 rounded-lg border border-orange-100">
+             <div className="text-sm text-orange-800">
+                <strong>Tip:</strong> Drag to position. Use slider to zoom. Image will be resized to HD quality.
+             </div>
+             <div className="flex gap-3">
+                <Button variant="outline" onClick={onCancel} disabled={uploading} className="border-gray-300">Cancel</Button>
+                <Button onClick={executeCrop} disabled={uploading} className="bg-orange-600 hover:bg-orange-700 text-white px-8">
+                  {uploading ? (
+                    <span className="flex items-center gap-2">
+                       <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                       Processing...
+                    </span>
+                  ) : "Crop & Upload"}
+                </Button>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Sortable Image Component
+function SortableImage({
+  image,
+  isMarkedForDelete,
+  onDelete,
+  onPreview,
+  API_BASE,
+}: {
+  image: Image;
+  isMarkedForDelete: boolean;
+  onDelete: (id: string) => void;
+  onPreview: (url: string, filename: string) => void;
+  API_BASE: string;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: image.id.toString() });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : "auto",
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`relative group aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-move shadow-sm hover:shadow-md transition-all ${
+        isDragging ? "ring-2 ring-orange-500 scale-105" : ""
+      }`}
+      {...attributes}
+      {...listeners}
+      onClick={() => onPreview(`${API_BASE}${image.path}`, image.filename)}
+    >
+      <img
+        src={`${API_BASE}${image.path}`}
+        alt={image.filename}
+        className={`w-full h-full object-cover transition-all ${
+          isMarkedForDelete ? "grayscale opacity-50" : "group-hover:scale-105"
+        }`}
+      />
+      <div className="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+         Drag to reorder
+      </div>
+      <button
+        className={`absolute top-2 right-2 p-1.5 rounded-full z-10 transition-all ${
+          isMarkedForDelete
+            ? "bg-green-500 text-white"
+            : "bg-white text-red-500 opacity-0 group-hover:opacity-100"
+        }`}
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(image.id);
+        }}
+        onPointerDown={(e) => e.stopPropagation()} // Prevent drag start on delete button
+      >
+        {isMarkedForDelete ? (
+          <Plus className="w-4 h-4 rotate-45" />
+        ) : (
+          <Trash2 className="w-4 h-4" />
+        )}
+      </button>
+
+      {/* Order Badge */}
+       <div className="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded opacity-100 pointer-events-none">
+         #{image.order}
+      </div>
+    </div>
+  );
+}
+
 // Image Manager (Enhanced with preview modal, delete marking, and save functionality)
 function ImageManager({
   heroImages,
+  setHeroImages,
+  heroMobileImages,
+  setHeroMobileImages,
   galleryImages,
+  setGalleryImages,
   onRefresh,
   imagesToDelete,
   setImagesToDelete,
 }: ImageManagerProps) {
   const [uploading, setUploading] = useState(false);
+  const [cropCategory, setCropCategory] = useState<string | null>(null);
+  const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
+
+  // File inputs
   const heroFileInputRef = useRef<HTMLInputElement>(null);
+  const heroMobileFileInputRef = useRef<HTMLInputElement>(null);
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
 
   // Image preview modal state
@@ -1218,48 +1451,64 @@ function ImageManager({
   // Get API base URL for image paths
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3000';
 
-  // Handle file selection and upload immediately
-  const handleFileSelect = async (
+  // Sortable Sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
+  // 1. Handle File Selection -> Open Cropper
+  const handleFileSelect = (
     event: React.ChangeEvent<HTMLInputElement>,
     category: string
   ) => {
     const file = event.target.files?.[0];
-    if (!file) {
-      console.log("No file selected");
-      return;
-    }
+    if (!file) return;
 
-    console.log(`File selected: ${file.name}, Size: ${file.size}, Type: ${file.type}, Category: ${category}`);
+    // Check limit
+    let currentCount = 0;
+    if (category === "hero") currentCount = heroImages.length;
+    else if (category === "hero-mobile") currentCount = heroMobileImages.length;
+    else currentCount = galleryImages.length;
 
-    // Check image limit (15 images per category)
-    const currentImages = category === "hero" ? heroImages : galleryImages;
-    if (currentImages.length >= 15) {
-      alert(`Maximum limit of 15 images reached for ${category} category. Please delete some images first.`);
-      // Reset file input
+    if (currentCount >= 15) {
+      alert(`Maximum limit of 15 images reached for this category.`);
       event.target.value = "";
       return;
     }
 
+    // Read file for cropper
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      setCropImageSrc(reader.result?.toString() || "");
+      setCropCategory(category);
+    });
+    reader.readAsDataURL(file);
+    event.target.value = ""; // reset input for next time
+  };
+
+  // 2. Handle Crop Complete -> Upload
+  const handleCropComplete = async (croppedBlob: Blob) => {
+    if (!cropCategory) return;
+
     setUploading(true);
     try {
-      console.log("Starting upload...");
-      const uploaded = await imagesAPI.upload(file, category);
-      console.log("Upload response:", uploaded);
+      // Create a file from blob
+      const file = new File([croppedBlob], `upload-${Date.now()}.jpg`, { type: "image/jpeg" });
 
+      const uploaded = await imagesAPI.upload(file, cropCategory);
       if (uploaded) {
-        console.log("Upload successful, refreshing images...");
-        // Refresh images
         onRefresh();
-        // Reset file input
-        event.target.value = "";
         alert("Image uploaded successfully!");
+        // Close cropper
+        setCropImageSrc(null);
+        setCropCategory(null);
       } else {
-        console.error("Upload returned null/false");
-        alert("Failed to upload image. Please try again.");
+        alert("Failed to upload image.");
       }
     } catch (error) {
-      console.error("Upload failed:", error);
-      alert(`Failed to upload image: ${error instanceof Error ? error.message : "Unknown error"}`);
+      console.error(error);
+      alert("Upload failed.");
     } finally {
       setUploading(false);
     }
@@ -1278,239 +1527,145 @@ function ImageManager({
     });
   };
 
+  // Drag End Handler
+  const handleDragEnd = (event: any, category: string) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const updateOrder = (items: Image[], setItems: React.Dispatch<React.SetStateAction<Image[]>>) => {
+      const oldIndex = items.findIndex((i) => i.id.toString() === active.id);
+      const newIndex = items.findIndex((i) => i.id.toString() === over.id);
+      const newItems = arrayMove(items, oldIndex, newIndex).map((item, index) => ({ ...item, order: index }));
+      setItems(newItems);
+    };
+
+    if (category === "hero") {
+      updateOrder(heroImages, setHeroImages);
+    } else if (category === "hero-mobile") {
+       updateOrder(heroMobileImages, setHeroMobileImages);
+    } else if (category === "gallery") {
+      updateOrder(galleryImages, setGalleryImages);
+    }
+  };
+
+  const renderImageGrid = (
+    images: Image[],
+    setImages: React.Dispatch<React.SetStateAction<Image[]>>,
+    title: string,
+    category: string,
+    onUploadClick: () => void,
+    emptyText: string
+  ) => (
+    <div className="mb-8 p-4 border rounded-xl bg-gray-50/50">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-gray-700 flex items-center gap-2">
+            {title}
+            <span className="text-xs font-normal text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">
+               {images.length} / 15
+            </span>
+          </h3>
+          <Button variant="outline" size="sm" onClick={onUploadClick} disabled={uploading}>
+            <Plus className="w-4 h-4 mr-2" /> Add Image
+          </Button>
+        </div>
+
+        {images.length > 0 ? (
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e, category)}>
+            <SortableContext items={images.map(img => img.id.toString())} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {images.map((img) => {
+                    const isMarked = imagesToDelete.has(img.id);
+                    return (
+                      <SortableImage
+                        key={img.id}
+                        image={img}
+                        isMarkedForDelete={isMarked}
+                        onDelete={toggleDeleteMark}
+                        onPreview={(url, filename) => setPreviewImage({ url, filename })}
+                        API_BASE={API_BASE}
+                      />
+                    )
+                })}
+              </div>
+            </SortableContext>
+          </DndContext>
+        ) : (
+           <div className="text-center py-10 bg-white border-2 border-dashed border-gray-200 rounded-lg">
+              <ImageIcon className="w-10 h-10 mx-auto text-gray-300 mb-2" />
+              <p className="text-sm text-gray-500">{emptyText}</p>
+           </div>
+        )}
+    </div>
+  );
+
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Image Management</h2>
+      <h2 className="text-xl font-semibold mb-6">Image Management</h2>
 
-      {/* Hero Images */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-medium">Hero Slider Images</h3>
-          <span className="text-sm text-gray-600">
-            {heroImages.length} / 15 images
-          </span>
-        </div>
+      {/* Hero Desktop */}
+      {renderImageGrid(
+         heroImages,
+         setHeroImages,
+         "Hero Slider (Desktop - Landscape)",
+         "hero",
+         () => heroFileInputRef.current?.click(),
+         "No desktop hero images"
+      )}
+      <input type="file" ref={heroFileInputRef} accept="image/*" className="hidden" onChange={(e) => handleFileSelect(e, "hero")} />
 
-        {/* Existing Images Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          {heroImages.map((img) => {
-            const isMarkedForDelete = imagesToDelete.has(img.id);
-            return (
-              <div
-                key={img.id}
-                className={`relative group cursor-pointer ${isMarkedForDelete ? 'opacity-50' : ''}`}
-                onClick={() => setPreviewImage({ url: `${API_BASE}${img.path}`, filename: img.filename })}
-              >
-                <img
-                  src={`${API_BASE}${img.path}`}
-                  alt={img.alt || "Hero image"}
-                  className={`w-full h-48 object-cover rounded-lg border-2 transition-all ${
-                    isMarkedForDelete
-                      ? 'border-red-500 grayscale'
-                      : 'border-gray-200 group-hover:border-orange-400'
-                  }`}
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg" />
+      {/* Hero Mobile */}
+      {renderImageGrid(
+         heroMobileImages,
+         setHeroMobileImages,
+         "Hero Slider (Mobile - Portrait)",
+         "hero-mobile",
+         () => heroMobileFileInputRef.current?.click(),
+         "No mobile hero images. Desktop images will be used (and cropped)."
+      )}
+      <input type="file" ref={heroMobileFileInputRef} accept="image/*" className="hidden" onChange={(e) => handleFileSelect(e, "hero-mobile")} />
 
-                {/* Delete X button */}
-                <button
-                  className={`absolute top-2 right-2 transition-opacity z-10 rounded-md px-2 py-1 text-white font-medium ${
-                    isMarkedForDelete
-                      ? 'opacity-100 bg-green-600 hover:bg-green-700'
-                      : 'opacity-0 group-hover:opacity-100 bg-red-600 hover:bg-red-700'
-                  }`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleDeleteMark(img.id);
-                  }}
-                >
-                  {isMarkedForDelete ? (
-                    <span className="text-xs">Undo</span>
-                  ) : (
-                    <X className="w-4 h-4" />
-                  )}
-                </button>
+      {/* Gallery */}
+      {renderImageGrid(
+         galleryImages,
+         setGalleryImages,
+         "Gallery Images",
+         "gallery",
+         () => galleryFileInputRef.current?.click(),
+         "No gallery images"
+      )}
+      <input type="file" ref={galleryFileInputRef} accept="image/*" className="hidden" onChange={(e) => handleFileSelect(e, "gallery")} />
 
-                {/* Filename overlay */}
-                <div className="absolute bottom-2 left-2 right-2 bg-black bg-opacity-70 text-white text-xs p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                  {isMarkedForDelete && <span className="text-red-400 font-semibold">MARKED FOR DELETE - </span>}
-                  {img.filename}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {heroImages.length === 0 && (
-          <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-            <ImageIcon className="w-12 h-12 mx-auto text-gray-400 mb-2" />
-            <p className="text-gray-500">No hero images uploaded yet</p>
-          </div>
-        )}
-
-        {/* Upload Section */}
-        <div className="mt-4">
-          <input
-            ref={heroFileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleFileSelect(e, "hero")}
-            disabled={uploading}
-            className="hidden"
-          />
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log("Hero upload button clicked");
-              console.log("Hero file input ref:", heroFileInputRef.current);
-              if (heroFileInputRef.current) {
-                heroFileInputRef.current.click();
-                console.log("File input click triggered");
-              } else {
-                console.error("Hero file input ref is null");
-              }
-            }}
-            disabled={uploading}
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            {uploading ? "Uploading..." : "Add Hero Image"}
-          </Button>
-        </div>
-      </div>
-
-      {/* Gallery Images */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-medium">Gallery Images</h3>
-          <span className="text-sm text-gray-600">
-            {galleryImages.length} / 15 images
-          </span>
-        </div>
-
-        {/* Existing Images Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          {galleryImages.map((img) => {
-            const isMarkedForDelete = imagesToDelete.has(img.id);
-            return (
-              <div
-                key={img.id}
-                className={`relative group cursor-pointer ${isMarkedForDelete ? 'opacity-50' : ''}`}
-                onClick={() => setPreviewImage({ url: `${API_BASE}${img.path}`, filename: img.filename })}
-              >
-                <img
-                  src={`${API_BASE}${img.path}`}
-                  alt={img.alt || "Gallery image"}
-                  className={`w-full h-48 object-cover rounded-lg border-2 transition-all ${
-                    isMarkedForDelete
-                      ? 'border-red-500 grayscale'
-                      : 'border-gray-200 group-hover:border-orange-400'
-                  }`}
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg" />
-
-                {/* Delete X button */}
-                <button
-                  className={`absolute top-2 right-2 transition-opacity z-10 rounded-md px-2 py-1 text-white font-medium ${
-                    isMarkedForDelete
-                      ? 'opacity-100 bg-green-600 hover:bg-green-700'
-                      : 'opacity-0 group-hover:opacity-100 bg-red-600 hover:bg-red-700'
-                  }`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleDeleteMark(img.id);
-                  }}
-                >
-                  {isMarkedForDelete ? (
-                    <span className="text-xs">Undo</span>
-                  ) : (
-                    <X className="w-4 h-4" />
-                  )}
-                </button>
-
-                {/* Filename overlay */}
-                <div className="absolute bottom-2 left-2 right-2 bg-black bg-opacity-70 text-white text-xs p-2 rounded opacity-opacity-0 group-hover:opacity-100 transition-opacity">
-                  {isMarkedForDelete && <span className="text-red-400 font-semibold">MARKED FOR DELETE - </span>}
-                  {img.filename}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {galleryImages.length === 0 && (
-          <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-            <ImageIcon className="w-12 h-12 mx-auto text-gray-400 mb-2" />
-            <p className="text-gray-500">No gallery images uploaded yet</p>
-          </div>
-        )}
-
-        {/* Upload Section */}
-        <div className="mt-4">
-          <input
-            ref={galleryFileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleFileSelect(e, "gallery")}
-            disabled={uploading}
-            className="hidden"
-          />
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log("Gallery upload button clicked");
-              console.log("Gallery file input ref:", galleryFileInputRef.current);
-              if (galleryFileInputRef.current) {
-                galleryFileInputRef.current.click();
-                console.log("File input click triggered");
-              } else {
-                console.error("Gallery file input ref is null");
-              }
-            }}
-            disabled={uploading}
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            {uploading ? "Uploading..." : "Add Gallery Image"}
-          </Button>
-        </div>
-      </div>
-
-      {/* Pending Changes Indicator */}
-      {imagesToDelete.size > 0 && (
-        <div className="mt-6 p-3 bg-amber-50 border-2 border-amber-200 rounded-lg">
-          <p className="text-sm text-amber-800">
-            ⚠️ {imagesToDelete.size} image(s) marked for deletion. Click "Save Changes" button below to confirm.
-          </p>
+      {/* Pending Changes */}
+       {imagesToDelete.size > 0 && (
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white px-6 py-4 rounded-full shadow-2xl border border-red-100 flex items-center gap-4 animate-in slide-in-from-bottom-10 z-40">
+           <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+             <Trash2 className="w-5 h-5" />
+           </div>
+           <div>
+             <p className="font-bold text-gray-800">{imagesToDelete.size} images marked for deletion</p>
+             <p className="text-xs text-gray-500">Click Save Changes to verify</p>
+           </div>
         </div>
       )}
 
-      {/* Image Preview Modal */}
+      {/* Cropper Modal */}
+      {cropImageSrc && (
+        <ImageCropper
+          imageSrc={cropImageSrc}
+          aspectRatio={cropCategory === "hero-mobile" ? 9 / 16 : 16 / 9}
+          onCancel={() => {
+            setCropImageSrc(null);
+            setCropCategory(null);
+          }}
+          onCropComplete={handleCropComplete}
+          uploading={uploading}
+        />
+      )}
+
+      {/* Preview Modal */}
       {previewImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-          onClick={() => setPreviewImage(null)}
-        >
-          <div className="max-w-4xl max-h-[90vh] relative" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
-              onClick={() => setPreviewImage(null)}
-            >
-              <X className="w-8 h-8" />
-            </button>
-            <img
-              src={previewImage.url}
-              alt={previewImage.filename}
-              className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
-            />
-            <div className="absolute -bottom-10 left-0 right-0 text-center text-white text-sm">
-              {previewImage.filename}
-            </div>
-          </div>
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4" onClick={() => setPreviewImage(null)}>
+           <img src={previewImage.url} alt="Preview" className="max-w-full max-h-[90vh] object-contain rounded" />
         </div>
       )}
     </div>
