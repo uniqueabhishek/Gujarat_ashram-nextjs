@@ -245,6 +245,176 @@ function getIconComponent(iconName) {
     return iconMap[iconName] || __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__["Home"]; // Default to Home if not found
 }
 }),
+"[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "ZenPreloader",
+    ()=>ZenPreloader
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+'use client';
+;
+;
+;
+function ZenPreloader({ onComplete }) {
+    const [exit, setExit] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        // Determine total loading time (min 2s for effect)
+        const timer = setTimeout(()=>{
+            setExit(true);
+            setTimeout(onComplete, 800); // Wait for exit animation
+        }, 2000);
+        return ()=>clearTimeout(timer);
+    }, [
+        onComplete
+    ]);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+        className: "fixed inset-0 z-[100] flex items-center justify-center bg-ashram-sand",
+        initial: {
+            opacity: 1
+        },
+        animate: exit ? {
+            opacity: 0
+        } : {
+            opacity: 1
+        },
+        transition: {
+            duration: 0.8,
+            ease: "easeInOut"
+        },
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "relative flex flex-col items-center",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "relative w-32 h-32 mb-8",
+                    children: [
+                        [
+                            ...Array(3)
+                        ].map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                                className: "absolute inset-0 border-2 border-ashram-amber/30 rounded-full",
+                                initial: {
+                                    scale: 0.8,
+                                    opacity: 0
+                                },
+                                animate: {
+                                    scale: [
+                                        1,
+                                        1.5,
+                                        1
+                                    ],
+                                    opacity: [
+                                        0.5,
+                                        0,
+                                        0.5
+                                    ],
+                                    rotate: [
+                                        0,
+                                        180,
+                                        360
+                                    ]
+                                },
+                                transition: {
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    delay: i * 0.4,
+                                    ease: "easeInOut"
+                                }
+                            }, i, false, {
+                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx",
+                                lineNumber: 29,
+                                columnNumber: 14
+                            }, this)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                            className: "absolute inset-0 m-auto w-4 h-4 bg-ashram-amber rounded-full",
+                            animate: {
+                                scale: [
+                                    1,
+                                    1.2,
+                                    1
+                                ]
+                            },
+                            transition: {
+                                duration: 2,
+                                repeat: Infinity
+                            }
+                        }, void 0, false, {
+                            fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx",
+                            lineNumber: 46,
+                            columnNumber: 12
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx",
+                    lineNumber: 27,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                    className: "overflow-hidden h-8",
+                    initial: {
+                        opacity: 0
+                    },
+                    animate: {
+                        opacity: 1
+                    },
+                    transition: {
+                        delay: 0.5
+                    },
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].h1, {
+                        className: "text-ashram-clay font-serif text-2xl tracking-[0.2em] uppercase",
+                        initial: {
+                            y: 30
+                        },
+                        animate: {
+                            y: 0
+                        },
+                        transition: {
+                            duration: 0.8,
+                            ease: "easeOut"
+                        },
+                        children: "Gujarat Ashram"
+                    }, void 0, false, {
+                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx",
+                        lineNumber: 60,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx",
+                    lineNumber: 54,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                    className: "mt-2 text-ashram-stone/60 text-xs tracking-widest uppercase",
+                    initial: {
+                        opacity: 0
+                    },
+                    animate: {
+                        opacity: 1
+                    },
+                    transition: {
+                        delay: 0.8
+                    },
+                    children: "Loading Serenity"
+                }, void 0, false, {
+                    fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx",
+                    lineNumber: 70,
+                    columnNumber: 9
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx",
+            lineNumber: 25,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx",
+        lineNumber: 19,
+        columnNumber: 5
+    }, this);
+}
+}),
 "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
@@ -272,7 +442,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wr
 var __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$swiper$2f$modules$2f$pagination$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Pagination$3e$__ = __turbopack_context__.i("[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/node_modules/swiper/modules/pagination.mjs [app-ssr] (ecmascript) <export default as Pagination>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$lib$2f$api$2d$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/lib/api-client.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$lib$2f$iconMapping$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/lib/iconMapping.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$components$2f$ZenPreloader$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/components/ZenPreloader.tsx [app-ssr] (ecmascript)");
 'use client';
+;
 ;
 ;
 ;
@@ -335,27 +507,19 @@ function HomePage() {
         }
     };
     if (loading) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "min-h-screen flex items-center justify-center bg-ashram-sand",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "text-2xl text-ashram-clay",
-                children: "Loading..."
-            }, void 0, false, {
-                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                lineNumber: 72,
-                columnNumber: 9
-            }, this)
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$components$2f$ZenPreloader$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ZenPreloader"], {
+            onComplete: ()=>setLoading(false)
         }, void 0, false, {
             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
             lineNumber: 71,
-            columnNumber: 7
+            columnNumber: 12
         }, this);
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "min-h-screen bg-ashram-sand",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-                className: `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'}`,
+                className: `fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/70 backdrop-blur-xl border-b border-ashram-stone/5 shadow-sm py-3' : 'bg-transparent py-6'}`,
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "max-w-7xl mx-auto px-6 flex justify-between items-center",
@@ -365,7 +529,7 @@ function HomePage() {
                                 children: "Gujarat Ashram"
                             }, void 0, false, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 88,
+                                lineNumber: 85,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -390,7 +554,7 @@ function HomePage() {
                                             children: item.name
                                         }, i, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 116,
+                                            lineNumber: 113,
                                             columnNumber: 19
                                         }, this);
                                     }
@@ -400,13 +564,13 @@ function HomePage() {
                                         children: item.name
                                     }, i, false, {
                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                        lineNumber: 128,
+                                        lineNumber: 125,
                                         columnNumber: 17
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 93,
+                                lineNumber: 90,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -416,24 +580,24 @@ function HomePage() {
                                     className: isScrolled ? 'text-ashram-stone' : 'text-white'
                                 }, void 0, false, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 147,
+                                    lineNumber: 144,
                                     columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$menu$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Menu$3e$__["Menu"], {
                                     className: isScrolled ? 'text-ashram-stone' : 'text-white'
                                 }, void 0, false, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 149,
+                                    lineNumber: 146,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 142,
+                                lineNumber: 139,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                        lineNumber: 87,
+                        lineNumber: 84,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -462,7 +626,7 @@ function HomePage() {
                                             children: item.name
                                         }, i, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 167,
+                                            lineNumber: 164,
                                             columnNumber: 23
                                         }, this);
                                     }
@@ -472,29 +636,29 @@ function HomePage() {
                                         children: item.name
                                     }, i, false, {
                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                        lineNumber: 179,
+                                        lineNumber: 176,
                                         columnNumber: 21
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 163,
+                                lineNumber: 160,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 157,
+                            lineNumber: 154,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                        lineNumber: 155,
+                        lineNumber: 152,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                lineNumber: 80,
+                lineNumber: 77,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
@@ -532,37 +696,37 @@ function HomePage() {
                                                 }
                                             }, void 0, false, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 210,
+                                                lineNumber: 207,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "absolute inset-0 bg-black/30 mix-blend-multiply"
                                             }, void 0, false, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 216,
+                                                lineNumber: 213,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"
                                             }, void 0, false, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 217,
+                                                lineNumber: 214,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                        lineNumber: 209,
+                                        lineNumber: 206,
                                         columnNumber: 19
                                     }, this)
                                 }, i, false, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 208,
+                                    lineNumber: 205,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 198,
+                            lineNumber: 195,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "absolute inset-0 bg-gradient-to-br from-ashram-clay to-ashram-stone",
@@ -570,17 +734,17 @@ function HomePage() {
                                 className: "absolute inset-0 bg-black/30"
                             }, void 0, false, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 224,
+                                lineNumber: 221,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 223,
+                            lineNumber: 220,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                        lineNumber: 196,
+                        lineNumber: 193,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -622,7 +786,7 @@ function HomePage() {
                                         " ",
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 251,
+                                            lineNumber: 248,
                                             columnNumber: 60
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].span, {
@@ -644,13 +808,13 @@ function HomePage() {
                                             children: aboutContent?.heroSubtitle || 'Gujarat Ashram'
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 252,
+                                            lineNumber: 249,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 241,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].p, {
@@ -671,7 +835,7 @@ function HomePage() {
                                     children: aboutContent?.heroDescription || 'Discover a sanctuary for inner peace, ancient wisdom, and holistic rejuvenation amidst nature\'s embrace.'
                                 }, void 0, false, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 263,
+                                    lineNumber: 260,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -717,35 +881,35 @@ function HomePage() {
                                                 children: button.name
                                             }, void 0, false, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 301,
+                                                lineNumber: 298,
                                                 columnNumber: 21
                                             }, this)
                                         }, i, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 296,
+                                            lineNumber: 293,
                                             columnNumber: 19
                                         }, this);
                                     })
                                 }, void 0, false, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 273,
+                                    lineNumber: 270,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 230,
+                            lineNumber: 227,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                        lineNumber: 229,
+                        lineNumber: 226,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                lineNumber: 195,
+                lineNumber: 192,
                 columnNumber: 7
             }, this),
             infoCards.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -770,7 +934,7 @@ function HomePage() {
                             children: "Our Offerings"
                         }, void 0, false, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 321,
+                            lineNumber: 318,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -820,12 +984,12 @@ function HomePage() {
                                                 className: "w-8 h-8 text-ashram-amber"
                                             }, void 0, false, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 356,
+                                                lineNumber: 353,
                                                 columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 355,
+                                            lineNumber: 352,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -833,7 +997,7 @@ function HomePage() {
                                             children: card.title
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 358,
+                                            lineNumber: 355,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -841,30 +1005,30 @@ function HomePage() {
                                             children: card.description
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 361,
+                                            lineNumber: 358,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, card.id, true, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 346,
+                                    lineNumber: 343,
                                     columnNumber: 19
                                 }, this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 329,
+                            lineNumber: 326,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                    lineNumber: 320,
+                    lineNumber: 317,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                lineNumber: 319,
+                lineNumber: 316,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -896,7 +1060,7 @@ function HomePage() {
                                             children: aboutContent?.aboutBadge || "Discover"
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 383,
+                                            lineNumber: 380,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -904,7 +1068,7 @@ function HomePage() {
                                             children: aboutContent?.aboutTitle || "Why Visit the Gujarat Ashram?"
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 386,
+                                            lineNumber: 383,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -912,13 +1076,13 @@ function HomePage() {
                                             children: aboutContent?.aboutDescription || "Experience a calm environment filled with wisdom and transformative meditation practices. Our programs are designed for all levels, from beginners to advanced practitioners, providing a path to inner silence and outer dynamism."
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 389,
+                                            lineNumber: 386,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 377,
+                                    lineNumber: 374,
                                     columnNumber: 13
                                 }, this),
                                 galleryImages.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -965,31 +1129,31 @@ function HomePage() {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                    lineNumber: 418,
+                                                    lineNumber: 415,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"
                                                 }, void 0, false, {
                                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                    lineNumber: 422,
+                                                    lineNumber: 419,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, i, true, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 409,
+                                            lineNumber: 406,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 396,
+                                    lineNumber: 393,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 375,
+                            lineNumber: 372,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1018,7 +1182,7 @@ function HomePage() {
                                                 className: "absolute top-0 right-0 w-64 h-64 bg-ashram-amber/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 -z-10 group-hover:bg-ashram-amber/10 transition-colors duration-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 442,
+                                                lineNumber: 439,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1033,12 +1197,12 @@ function HomePage() {
                                                                     className: "w-7 h-7 text-white"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                    lineNumber: 448,
+                                                                    lineNumber: 445,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                lineNumber: 447,
+                                                                lineNumber: 444,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1048,7 +1212,7 @@ function HomePage() {
                                                                         children: "Get in Touch"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                        lineNumber: 451,
+                                                                        lineNumber: 448,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1056,19 +1220,19 @@ function HomePage() {
                                                                         children: "We're here to help you on your journey"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                        lineNumber: 452,
+                                                                        lineNumber: 449,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                lineNumber: 450,
+                                                                lineNumber: 447,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                        lineNumber: 446,
+                                                        lineNumber: 443,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1084,14 +1248,14 @@ function HomePage() {
                                                                                     className: "w-4 h-4 text-ashram-amber"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                                    lineNumber: 462,
+                                                                                    lineNumber: 459,
                                                                                     columnNumber: 30
                                                                                 }, this),
                                                                                 "Visit Us"
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                            lineNumber: 461,
+                                                                            lineNumber: 458,
                                                                             columnNumber: 28
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1099,7 +1263,7 @@ function HomePage() {
                                                                             children: address.value
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                            lineNumber: 465,
+                                                                            lineNumber: 462,
                                                                             columnNumber: 28
                                                                         }, this),
                                                                         address.url && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1120,24 +1284,24 @@ function HomePage() {
                                                                                         className: "w-4 h-4 ml-2"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                                        lineNumber: 474,
+                                                                                        lineNumber: 471,
                                                                                         columnNumber: 49
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                                lineNumber: 468,
+                                                                                lineNumber: 465,
                                                                                 columnNumber: 32
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                            lineNumber: 467,
+                                                                            lineNumber: 464,
                                                                             columnNumber: 30
                                                                         }, this)
                                                                     ]
                                                                 }, address.id, true, {
                                                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                    lineNumber: 460,
+                                                                    lineNumber: 457,
                                                                     columnNumber: 26
                                                                 }, this)),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1161,12 +1325,12 @@ function HomePage() {
                                                                                     className: "w-4 h-4"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                                    lineNumber: 496,
+                                                                                    lineNumber: 493,
                                                                                     columnNumber: 35
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                                lineNumber: 495,
+                                                                                lineNumber: 492,
                                                                                 columnNumber: 33
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1177,7 +1341,7 @@ function HomePage() {
                                                                                         children: contact.label
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                                        lineNumber: 499,
+                                                                                        lineNumber: 496,
                                                                                         columnNumber: 35
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1185,43 +1349,43 @@ function HomePage() {
                                                                                         children: contact.value
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                                        lineNumber: 500,
+                                                                                        lineNumber: 497,
                                                                                         columnNumber: 35
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                                lineNumber: 498,
+                                                                                lineNumber: 495,
                                                                                 columnNumber: 33
                                                                             }, this)
                                                                         ]
                                                                     }, idx, true, {
                                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                        lineNumber: 488,
+                                                                        lineNumber: 485,
                                                                         columnNumber: 31
                                                                     }, this);
                                                                 })
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                                lineNumber: 482,
+                                                                lineNumber: 479,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                        lineNumber: 457,
+                                                        lineNumber: 454,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 444,
+                                                lineNumber: 441,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                        lineNumber: 440,
+                                        lineNumber: 437,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1234,7 +1398,7 @@ function HomePage() {
                                                 className: "absolute inset-0 bg-[url('https://www.google.com/maps/vt/data=LYENz1W1...')] bg-cover opacity-20 grayscale group-hover:grayscale-0 transition-all duration-700"
                                             }, void 0, false, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 516,
+                                                lineNumber: 513,
                                                 columnNumber: 18
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1247,7 +1411,7 @@ function HomePage() {
                                                         className: "w-10 h-10 text-ashram-amber mx-auto mb-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                        lineNumber: 521,
+                                                        lineNumber: 518,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1255,41 +1419,41 @@ function HomePage() {
                                                         children: "View Detailed Map"
                                                     }, void 0, false, {
                                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                        lineNumber: 522,
+                                                        lineNumber: 519,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                                lineNumber: 517,
+                                                lineNumber: 514,
                                                 columnNumber: 18
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                        lineNumber: 512,
+                                        lineNumber: 509,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 431,
+                                lineNumber: 428,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 430,
+                            lineNumber: 427,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                    lineNumber: 372,
+                    lineNumber: 369,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                lineNumber: 371,
+                lineNumber: 368,
                 columnNumber: 7
             }, this),
             events.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1318,7 +1482,7 @@ function HomePage() {
                                             children: "Calendar"
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 540,
+                                            lineNumber: 537,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1326,13 +1490,13 @@ function HomePage() {
                                             children: "Upcoming Events"
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 541,
+                                            lineNumber: 538,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 535,
+                                    lineNumber: 532,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1344,19 +1508,19 @@ function HomePage() {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 546,
+                                            lineNumber: 543,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 545,
+                                    lineNumber: 542,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 534,
+                            lineNumber: 531,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1400,7 +1564,7 @@ function HomePage() {
                                             children: event.date
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 572,
+                                            lineNumber: 569,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1408,7 +1572,7 @@ function HomePage() {
                                             children: event.title
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 575,
+                                            lineNumber: 572,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1416,7 +1580,7 @@ function HomePage() {
                                             children: event.description
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 578,
+                                            lineNumber: 575,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1424,18 +1588,18 @@ function HomePage() {
                                             children: "Register Now"
                                         }, void 0, false, {
                                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                            lineNumber: 579,
+                                            lineNumber: 576,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, event.id, true, {
                                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                    lineNumber: 563,
+                                    lineNumber: 560,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 550,
+                            lineNumber: 547,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1449,88 +1613,355 @@ function HomePage() {
                                         className: "w-4 h-4"
                                     }, void 0, false, {
                                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                        lineNumber: 588,
+                                        lineNumber: 585,
                                         columnNumber: 33
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 587,
+                                lineNumber: 584,
                                 columnNumber: 16
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                            lineNumber: 586,
+                            lineNumber: 583,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                    lineNumber: 533,
+                    lineNumber: 530,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                lineNumber: 532,
+                lineNumber: 529,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
-                className: "bg-ashram-clay text-white py-12 px-4",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "max-w-7xl mx-auto text-center",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
-                        initial: {
-                            opacity: 0,
-                            y: 20
-                        },
-                        whileInView: {
-                            opacity: 1,
-                            y: 0
-                        },
-                        viewport: {
-                            once: true
-                        },
+                className: "bg-ashram-clay text-white pt-20 pb-10 px-6 relative overflow-hidden",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "absolute inset-0 opacity-5 pointer-events-none",
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                className: "text-3xl font-bold mb-4 font-serif",
-                                children: aboutContent?.footerTitle || 'Gujarat Ashram'
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"
                             }, void 0, false, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 603,
-                                columnNumber: 13
+                                lineNumber: 596,
+                                columnNumber: 12
                             }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-ashram-sand/80 max-w-2xl mx-auto",
-                                children: aboutContent?.footerDescription || 'A sanctuary for peace and spiritual growth'
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "absolute bottom-0 left-0 w-64 h-64 bg-ashram-amber rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"
                             }, void 0, false, {
                                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                                lineNumber: 606,
-                                columnNumber: 13
+                                lineNumber: 597,
+                                columnNumber: 12
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                        lineNumber: 598,
-                        columnNumber: 11
+                        lineNumber: 595,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "max-w-7xl mx-auto relative z-10",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "grid grid-cols-1 md:grid-cols-4 gap-12 mb-16",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "col-span-1 md:col-span-2 space-y-6",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                                                initial: {
+                                                    opacity: 0,
+                                                    y: 20
+                                                },
+                                                whileInView: {
+                                                    opacity: 1,
+                                                    y: 0
+                                                },
+                                                viewport: {
+                                                    once: true
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                        className: "text-4xl font-serif font-bold mb-4",
+                                                        children: aboutContent?.footerTitle || 'Gujarat Ashram'
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 610,
+                                                        columnNumber: 17
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-ashram-sand/60 max-w-sm leading-relaxed text-lg",
+                                                        children: aboutContent?.footerDescription || 'A sanctuary for peace, meditation, and spiritual growth in the heart of Gujarat.'
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 611,
+                                                        columnNumber: 17
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                lineNumber: 605,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "max-w-sm",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "text-sm font-medium text-ashram-sand/80 mb-2 block uppercase tracking-wider",
+                                                        children: "Join our Newsletter"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 618,
+                                                        columnNumber: 17
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex gap-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                type: "email",
+                                                                placeholder: "Enter your email",
+                                                                className: "bg-white/10 border border-white/20 rounded-lg px-4 py-2 flex-1 text-white placeholder:text-white/30 focus:outline-none focus:border-ashram-amber transition-colors"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                                lineNumber: 620,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                                                className: "bg-ashram-amber hover:bg-ashram-amber/90 text-ashram-clay font-bold",
+                                                                children: "Subscribe"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                                lineNumber: 625,
+                                                                columnNumber: 19
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 619,
+                                                        columnNumber: 17
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                lineNumber: 617,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                        lineNumber: 604,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                className: "font-bold text-lg mb-6 text-ashram-amber",
+                                                children: "Quick Links"
+                                            }, void 0, false, {
+                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                lineNumber: 634,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                                                className: "space-y-3",
+                                                children: [
+                                                    'Meditation Hall',
+                                                    'Programs',
+                                                    'Donate',
+                                                    'Volunteer'
+                                                ].map((link)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                            href: "#",
+                                                            className: "text-ashram-sand/70 hover:text-white hover:translate-x-1 transition-all inline-block",
+                                                            children: link
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                            lineNumber: 638,
+                                                            columnNumber: 21
+                                                        }, this)
+                                                    }, link, false, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 637,
+                                                        columnNumber: 19
+                                                    }, this))
+                                            }, void 0, false, {
+                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                lineNumber: 635,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                        lineNumber: 633,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                className: "font-bold text-lg mb-6 text-ashram-amber",
+                                                children: "Contact"
+                                            }, void 0, false, {
+                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                lineNumber: 648,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                                                className: "space-y-3",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                                        className: "flex items-center gap-2 text-ashram-sand/70",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "w-1.5 h-1.5 rounded-full bg-ashram-amber"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                                lineNumber: 651,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            " Call"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 650,
+                                                        columnNumber: 17
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                                        className: "flex items-center gap-2 text-ashram-sand/70",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "w-1.5 h-1.5 rounded-full bg-ashram-amber"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                                lineNumber: 654,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            " WhatsApp"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 653,
+                                                        columnNumber: 18
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                                        className: "flex items-center gap-2 text-ashram-sand/70",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "w-1.5 h-1.5 rounded-full bg-ashram-amber"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                                lineNumber: 657,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            " Email"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 656,
+                                                        columnNumber: 18
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                                        className: "flex items-center gap-2 text-ashram-sand/70",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "w-1.5 h-1.5 rounded-full bg-ashram-amber"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                                lineNumber: 660,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            " Map"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                        lineNumber: 659,
+                                                        columnNumber: 18
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                lineNumber: 649,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                        lineNumber: 647,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                lineNumber: 601,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-ashram-sand/40",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        children: "© 2025 Art of Living Gujarat Ashram. All rights reserved."
+                                    }, void 0, false, {
+                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                        lineNumber: 667,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex gap-6",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                href: "#",
+                                                className: "hover:text-white transition-colors",
+                                                children: "Privacy Policy"
+                                            }, void 0, false, {
+                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                lineNumber: 669,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Gujarat__Ashram__Website__Wrapper__Developement$2f$ashram$2d$nextjs$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                href: "#",
+                                                className: "hover:text-white transition-colors",
+                                                children: "Terms of Service"
+                                            }, void 0, false, {
+                                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                                lineNumber: 670,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                        lineNumber: 668,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                                lineNumber: 666,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
+                        lineNumber: 600,
+                        columnNumber: 9
                     }, this)
-                }, void 0, false, {
-                    fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                    lineNumber: 597,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
+                ]
+            }, void 0, true, {
                 fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-                lineNumber: 596,
+                lineNumber: 593,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Gujarat Ashram Website Wrapper Developement/ashram-nextjs/app/page.tsx",
-        lineNumber: 78,
+        lineNumber: 75,
         columnNumber: 5
     }, this);
 }
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__c03ec9d8._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__3c9cfbe0._.js.map
