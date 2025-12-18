@@ -297,7 +297,7 @@ export default function HomePage() {
             <h2 className="text-4xl font-bold text-ashram-clay mb-12 text-center font-serif">
               Our Offerings
             </h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {infoCards.map((card) => {
                 const IconComponent = getIconComponent(card.icon)
                 return (
