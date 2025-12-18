@@ -18,6 +18,7 @@ import {
   Trash2,
   Plus,
   X,
+  MapPin,
 } from "lucide-react";
 
 import {
@@ -231,7 +232,23 @@ const AdminDashboard = () => {
           success = true;
           break;
         case "contact":
-          await contactAPI.update(contactInfo);
+          // Auto-extract iframe src if user pasted full code
+          const cleanedContact = contactInfo.map(item => {
+            if (item.type === 'map' && item.value.trim().startsWith('<iframe')) {
+              // Extract src URL
+              const srcMatch = item.value.match(/src=["']([^"']+)["']/);
+              if (srcMatch && srcMatch[1]) {
+                console.log("Extracted map URL:", srcMatch[1]);
+                return { ...item, value: srcMatch[1] };
+              }
+            }
+            return item;
+          });
+
+          // Update local state to show cleaned URL
+          setContactInfo(cleanedContact);
+
+          await contactAPI.update(cleanedContact);
           success = true;
           break;
         case "images":
@@ -476,7 +493,7 @@ function MenuEditor({ items, setItems }: EditorProps<MenuItem>) {
                   className="w-4 h-4 text-orange-600"
                 />
                 <span className="text-sm font-medium text-gray-700">
-                  Special Button
+                  Display as Button
                 </span>
               </label>
 
@@ -487,9 +504,9 @@ function MenuEditor({ items, setItems }: EditorProps<MenuItem>) {
                   value={item.variant || "default"}
                   onChange={(e) => updateItem(idx, "variant", e.target.value)}
                 >
-                  <option value="default">Primary (Amber)</option>
-                  <option value="outline">Outline (White Border)</option>
-                  <option value="ghost">Ghost (Transparent)</option>
+                  <option value="default">Primary (Solid)</option>
+                  <option value="outline">Outline (Bordered)</option>
+                  <option value="ghost">Ghost (Text Only)</option>
                 </select>
               )}
             </div>
@@ -1014,6 +1031,22 @@ function InfoCardsEditor({ items, setItems }: EditorProps<InfoCard>) {
 
 // NEW: Contact Info Editor
 function ContactEditor({ items, setItems }: EditorProps<ContactInfo>) {
+  // Separate Map item from others
+  const mapItem = items.find(i => i.type === 'map');
+  const otherItems = items.filter(i => i.type !== 'map');
+
+  const addMap = () => {
+    if (mapItem) return;
+    const newMap: ContactInfo = {
+      id: Date.now().toString(),
+      type: "map",
+      label: "Map Location",
+      value: "", // Homepage reads 'value' for iframe src
+      url: "",
+    };
+    setItems([newMap, ...items]);
+  };
+
   const addItem = () => {
     const newItem: ContactInfo = {
       id: Date.now().toString(),
@@ -1025,87 +1058,132 @@ function ContactEditor({ items, setItems }: EditorProps<ContactInfo>) {
     setItems([...items, newItem]);
   };
 
-  const removeItem = (index: number) => {
-    setItems(items.filter((_, i) => i !== index));
+  const removeItem = (id: string) => {
+    setItems(items.filter((i) => i.id !== id));
   };
 
-  const updateItem = (index: number, field: string, value: string) => {
-    const updated = [...items];
-    updated[index] = { ...updated[index], [field]: value };
-    setItems(updated);
+  const updateItem = (id: string, field: string, value: string) => {
+    setItems(items.map(item => item.id === id ? { ...item, [field]: value } : item));
   };
 
   const typeOptions = [
-    { value: "phone", label: "Phone" },
-    { value: "email", label: "Email" },
-    { value: "whatsapp", label: "WhatsApp" },
-    { value: "address", label: "Address" },
-    { value: "map", label: "Map Embed" },
-    { value: "website", label: "Website" },
-    { value: "other", label: "Other" },
+    { value: "phone", label: "Phone", color: "bg-blue-100 text-blue-800" },
+    { value: "whatsapp", label: "WhatsApp", color: "bg-green-100 text-green-800" },
+    { value: "email", label: "Email", color: "bg-rose-100 text-rose-800" },
+    { value: "website", label: "Website", color: "bg-violet-100 text-violet-800" },
+    { value: "address", label: "Address", color: "bg-gray-100 text-gray-800" },
+    { value: "other", label: "Other", color: "bg-gray-100 text-gray-800" },
   ];
 
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
-      <p className="text-sm text-gray-600 mb-4">
-        Manage contact details shown in the Location & Contact section
-      </p>
 
-      {/* Instructions */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <h3 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
-          💡 How to Configure Contact Information
-        </h3>
-        <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-          <li><strong>Address:</strong> Set type to "Address", add your ashram address in the value field</li>
-          <li><strong>Phone/WhatsApp:</strong> Add phone numbers with proper tel: or WhatsApp URLs</li>
-          <li><strong>Map Embed:</strong> Set type to "Map Embed", paste Google Maps embed URL in the URL field</li>
-          <li className="ml-6 text-xs">To get Google Maps embed: Open Google Maps → Share → Embed a map → Copy HTML → Extract the src URL</li>
-        </ul>
+      {/* 1. Map Section */}
+      <div className="mb-8 p-4 bg-slate-50 border rounded-xl">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-semibold flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-ashram-clay" />
+            Location Map
+          </h3>
+          {!mapItem && (
+            <Button size="sm" onClick={addMap} className="bg-ashram-clay text-white">
+              Enable Map
+            </Button>
+          )}
+        </div>
+
+        {mapItem ? (
+          <div className="space-y-3">
+             <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-sm text-blue-900">
+               <strong className="block mb-1">How to get this link:</strong>
+               <ol className="list-decimal list-inside space-y-1 ml-1 text-blue-800">
+                 <li>Go to Google Maps and search for your location</li>
+                 <li>Click the <strong>Share</strong> button</li>
+                 <li>Select the <strong>Embed a map</strong> tab</li>
+                 <li>Click <strong>Copy HTML</strong></li>
+                 <li>Paste the full code below (we will protectively extract just the source URL automatically on save, or you can paste just the URL inside src="...").</li>
+               </ol>
+             </div>
+
+             <p className="text-sm text-gray-500 font-medium">
+               Paste Google Maps Embed Source URL:
+             </p>
+             <div className="flex gap-2">
+                <input
+                  className="flex-1 px-3 py-2 border rounded font-mono text-sm"
+                  placeholder="https://www.google.com/maps/embed?..."
+                  value={mapItem.value}
+                  onChange={(e) => updateItem(mapItem.id, "value", e.target.value)}
+                />
+                <Button variant="outline" onClick={() => removeItem(mapItem.id)}>
+                  <Trash2 className="w-4 h-4 text-red-500" />
+                </Button>
+             </div>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-400 italic">No map configured. Click 'Enable Map' to add one.</p>
+        )}
       </div>
 
+      {/* 2. Contact Channels */}
+      <h3 className="font-semibold mb-3">Contact Channels</h3>
       <div className="space-y-3">
-        {items.map((item, idx) => (
-          <Card key={idx} className="p-4">
-            <div className="grid grid-cols-2 gap-2">
-              <select
-                className="px-3 py-2 border rounded"
-                value={item.type}
-                onChange={(e) => updateItem(idx, "type", e.target.value)}
-              >
-                {typeOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+        {otherItems.map((item) => (
+          <Card key={item.id} className="p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="flex gap-2">
+                 <select
+                  className="px-3 py-2 border rounded w-1/3"
+                  value={item.type}
+                  onChange={(e) => updateItem(item.id, "type", e.target.value)}
+                >
+                  {typeOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
 
-              <input
-                className="px-3 py-2 border rounded"
-                placeholder="Display Label"
-                value={item.label}
-                onChange={(e) => updateItem(idx, "label", e.target.value)}
-              />
+                {/* Color Hint */}
+                {(() => {
+                   const opt = typeOptions.find(o => o.value === item.type);
+                   return opt ? (
+                     <div className={`px-3 py-2 rounded text-xs font-semibold flex items-center ${opt.color}`}>
+                       {opt.label} Color
+                     </div>
+                   ) : null;
+                })()}
 
-              <input
-                className="px-3 py-2 border rounded"
-                placeholder="Value (phone, email, etc.)"
-                value={item.value}
-                onChange={(e) => updateItem(idx, "value", e.target.value)}
-              />
+                <input
+                  className="flex-1 px-3 py-2 border rounded"
+                  placeholder="Label (e.g. Office)"
+                  value={item.label}
+                  onChange={(e) => updateItem(item.id, "label", e.target.value)}
+                />
+              </div>
 
               <div className="flex gap-2">
                 <input
                   className="flex-1 px-3 py-2 border rounded"
-                  placeholder="Link URL (optional)"
-                  value={item.url || ""}
-                  onChange={(e) => updateItem(idx, "url", e.target.value)}
+                  placeholder="Display Value (e.g. +91 999...)"
+                  value={item.value}
+                  onChange={(e) => updateItem(item.id, "value", e.target.value)}
                 />
+
+                {item.type !== 'address' && (
+                  <input
+                    className="flex-1 px-3 py-2 border rounded"
+                    placeholder="Action URL (tel:, mailto:)"
+                    value={item.url || ""}
+                    onChange={(e) => updateItem(item.id, "url", e.target.value)}
+                  />
+                )}
+
                 <Button
                   variant="outline"
                   size="default"
-                  onClick={() => removeItem(idx)}
+                  onClick={() => removeItem(item.id)}
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -1115,8 +1193,8 @@ function ContactEditor({ items, setItems }: EditorProps<ContactInfo>) {
         ))}
       </div>
 
-      <Button onClick={addItem} variant="outline" className="mt-4 w-full">
-        <Plus className="w-4 h-4 mr-2" /> Add Contact Info
+      <Button onClick={addItem} variant="outline" className="mt-4 w-full border-dashed">
+        <Plus className="w-4 h-4 mr-2" /> Add Channel
       </Button>
     </div>
   );
