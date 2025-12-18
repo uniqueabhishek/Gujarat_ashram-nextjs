@@ -28,6 +28,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   // Parallax Logic
   const { scrollY } = useScroll()
@@ -310,39 +311,37 @@ export default function HomePage() {
               }
             }}
           >
-            <motion.h1
-              className="font-serif font-bold text-white mb-6 drop-shadow-lg text-5xl md:text-7xl lg:text-8xl"
-              variants={{
-                hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  filter: "blur(0px)",
-                  transition: { duration: 1, ease: "easeOut" }
-                }
-              }}
-            >
-              {aboutContent?.heroTitle || 'Art of Living'} <br />
-              <motion.span
-                className="italic text-ashram-amber inline-block"
-                variants={{
-                  hidden: { opacity: 0, scale: 0.9, y: 20, filter: "blur(8px)" },
-                  visible: {
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                    filter: "blur(0px)",
-                    transition: {
-                      duration: 1.2,
-                      ease: [0.25, 0.4, 0.25, 1], // Smooth cubic-bezier
-                      delay: 0.2
+            <h1 className="font-serif font-bold text-white mb-6 drop-shadow-lg text-5xl md:text-7xl lg:text-8xl flex flex-col items-center leading-tight">
+              <div className="overflow-hidden">
+                <motion.span
+                  className="block"
+                  variants={{
+                    hidden: { y: "100%" },
+                    visible: {
+                      y: 0,
+                      transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] }
                     }
-                  }
-                }}
-              >
-                {aboutContent?.heroSubtitle || 'Sri Sri Gujarat Ashram'}
-              </motion.span>
-            </motion.h1>
+                  }}
+                >
+                  {aboutContent?.heroTitle || 'Art of Living'}
+                </motion.span>
+              </div>
+
+              <div className="overflow-hidden">
+                <motion.span
+                  className="italic text-ashram-amber inline-block"
+                  variants={{
+                    hidden: { y: "110%" },
+                    visible: {
+                      y: 0,
+                      transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.1 }
+                    }
+                  }}
+                >
+                  {aboutContent?.heroSubtitle || 'Sri Sri Gujarat Ashram'}
+                </motion.span>
+              </div>
+            </h1>
 
             <motion.p
               className="text-white/90 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed"
@@ -497,6 +496,8 @@ export default function HomePage() {
                       visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
                     }}
                     whileHover={{ scale: 1.05, transition: { duration: 0.4 } }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setSelectedImage(img.path)}
                     className="relative aspect-square overflow-hidden rounded-xl group cursor-pointer shadow-md"
                   >
                     <div
@@ -702,18 +703,27 @@ export default function HomePage() {
       )}
 
       {/* Mega Footer */}
-      <footer className="bg-ashram-clay text-white pt-20 pb-10 px-6 relative overflow-hidden">
+      <footer className="bg-ashram-clay text-white pt-10 pb-6 px-6 relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5 pointer-events-none">
            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
            <div className="absolute bottom-0 left-0 w-64 h-64 bg-ashram-amber rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
         </div>
 
+        {/* Trial 3: Footer Watermark */}
+        <div className="absolute bottom-0 right-0 pointer-events-none opacity-20 md:opacity-80">
+          <img
+            src="/images/ashram-sketch-transparent.png"
+            alt="Ashram Watermark"
+            className="w-[300px] md:w-[500px] h-auto translate-x-1/4 translate-y-1/4 brightness-0 invert"
+          />
+        </div>
+
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
 
             {/* Brand Column */}
-            <div className="col-span-1 md:col-span-2 space-y-6">
+            <div className="col-span-1 md:col-span-2 space-y-4">
               <motion.div
                  initial={{ opacity: 0, y: 20 }}
                  whileInView={{ opacity: 1, y: 0 }}
@@ -793,6 +803,38 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 cursor-zoom-out"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="relative w-auto h-auto max-w-full max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={selectedImage}
+                alt="Full size"
+                className="w-auto h-full max-h-[90vh] object-contain rounded-lg shadow-2xl mx-auto"
+              />
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 md:-top-12 md:-right-12 text-white/70 hover:text-white transition-colors bg-black/50 md:bg-transparent rounded-full p-2 md:p-0"
+              >
+                <X className="w-8 h-8" />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
