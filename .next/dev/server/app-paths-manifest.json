@@ -1,0 +1,11 @@
+{
+  "/api/about/route": "app/api/about/route.js",
+  "/api/contact/route": "app/api/contact/route.js",
+  "/api/events/route": "app/api/events/route.js",
+  "/api/hero-buttons/route": "app/api/hero-buttons/route.js",
+  "/api/images/by-category/[category]/route": "app/api/images/by-category/[category]/route.js",
+  "/api/info-cards/route": "app/api/info-cards/route.js",
+  "/api/menu-items/route": "app/api/menu-items/route.js",
+  "/api/test/route": "app/api/test/route.js",
+  "/page": "app/page.js"
+}

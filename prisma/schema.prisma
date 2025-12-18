@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model MenuItem {
+  id        Int      @id @default(autoincrement())
+  name      String
+  url       String
+  isSpecial Boolean  @default(false)  // ✅ NEW: Mark as special button
+  variant   String   @default("default") // ✅ NEW: Button style (default/outline/ghost)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HeroButton {
+  id        Int      @id @default(autoincrement())
+  name      String
+  url       String
+  variant   String   @default("default")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FooterLink {
+  id        Int      @id @default(autoincrement())
+  label     String
+  url       String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteImage {
+  id        Int      @id @default(autoincrement())
+  category  String   // "hero", "gallery", "event"
+  filename  String
+  path      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  date        String
+  description String
+  buttonText  String?
+  buttonUrl   String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AboutContent {
+  id                    Int      @id @default(autoincrement())
+  // Hero Section (Top of page)
+  heroTitle             String   // "Art of Living"
+  heroSubtitle          String   // "Gujarat Ashram"
+  heroDescription       String   // "Discover a sanctuary..."
+
+  // About Section (Middle - "Why Visit")
+  aboutBadge            String?  // "Discover"
+  aboutTitle            String   // "Why Visit the Gujarat Ashram?"
+  aboutDescription      String   // "Experience a calm environment..."
+  videoUrl              String?  // Optional video URL
+
+  // Footer Section
+  footerTitle           String   // "Gujarat Ashram" (footer)
+  footerDescription     String   // "A sanctuary for peace..."
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model InfoCard {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  icon        String
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactInfo {
+  id        Int      @id @default(autoincrement())
+  type      String   // "phone", "email", "whatsapp", "address", "website"
+  label     String
+  value     String
+  url       String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FooterSettings {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SocialLink {
+  id        Int      @id @default(autoincrement())
+  platform  String   // "facebook", "twitter", "instagram", "youtube", "linkedin", etc.
+  url       String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FooterButton {
+  id        Int      @id @default(autoincrement())
+  label     String
+  url       String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
