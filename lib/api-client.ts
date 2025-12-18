@@ -99,7 +99,7 @@ export const imagesAPI = {
     fetchAPI(`/api/images/by-category/${category}`),
   upload: async (file: File, category: string) => {
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append('image', file)
     formData.append('category', category)
 
     const response = await fetch(`${API_BASE}/api/images/upload`, {
@@ -108,14 +108,19 @@ export const imagesAPI = {
     })
 
     if (!response.ok) {
-      throw new Error(`Upload error: ${response.statusText}`)
+      throw new Error('Failed to upload image')
     }
 
     return response.json()
   },
   delete: (id: number) =>
-    fetchAPI(`/api/images/delete/${id}`, {
+    fetchAPI(`/api/images/${id}`, {
       method: 'DELETE',
+    }),
+  reorder: (updates: { id: number; order: number }[]) =>
+    fetchAPI('/api/images/reorder', {
+      method: 'POST',
+      body: JSON.stringify({ updates }),
     }),
 }
 
