@@ -94,8 +94,16 @@ export default function HomePage() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className={`font-serif font-bold text-2xl tracking-tight ${isScrolled ? 'text-ashram-clay' : 'text-white'}`}>
-            Gujarat Ashram
+          <div className="flex items-center gap-2">
+            <img
+              src="/images/aol-logo-transparent.png"
+              alt="Art of Living Logo"
+              className={`h-12 w-auto transition-all duration-500 ${isScrolled ? '' : 'brightness-0 invert'}`}
+            />
+            <div className="flex flex-col leading-tight">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#F59E0B]">The Art of Living</span>
+              <span className={`font-serif font-bold text-xl ${isScrolled ? 'text-ashram-clay' : 'text-white'}`}>Sri Sri Gujarat Ashram</span>
+            </div>
           </div>
 
           {/* Desktop Menu */}
@@ -305,19 +313,34 @@ export default function HomePage() {
             <motion.h1
               className="font-serif font-bold text-white mb-6 drop-shadow-lg text-5xl md:text-7xl lg:text-8xl"
               variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+                hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  filter: "blur(0px)",
+                  transition: { duration: 1, ease: "easeOut" }
+                }
               }}
             >
               {aboutContent?.heroTitle || 'Art of Living'} <br />
               <motion.span
                 className="italic text-ashram-amber inline-block"
                 variants={{
-                  hidden: { opacity: 0, scale: 0.9 },
-                  visible: { opacity: 1, scale: 1, transition: { duration: 1, ease: "easeOut" } }
+                  hidden: { opacity: 0, scale: 0.9, y: 20, filter: "blur(8px)" },
+                  visible: {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                    transition: {
+                      duration: 1.2,
+                      ease: [0.25, 0.4, 0.25, 1], // Smooth cubic-bezier
+                      delay: 0.2
+                    }
+                  }
                 }}
               >
-                {aboutContent?.heroSubtitle || 'Gujarat Ashram'}
+                {aboutContent?.heroSubtitle || 'Sri Sri Gujarat Ashram'}
               </motion.span>
             </motion.h1>
 
@@ -696,7 +719,13 @@ export default function HomePage() {
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
               >
-                <h3 className="text-4xl font-serif font-bold mb-4">{aboutContent?.footerTitle || 'Gujarat Ashram'}</h3>
+                <div className="flex items-center gap-4 mb-6">
+                   <img src="/images/aol-logo-transparent.png" alt="Logo" className="h-16 w-auto brightness-0 invert opacity-90" />
+                   <div>
+                     <p className="text-xs uppercase tracking-widest text-[#F59E0B] font-bold mb-1">The Art of Living</p>
+                     <h3 className="text-3xl font-serif font-bold leading-none">{aboutContent?.footerTitle || 'Sri Sri Gujarat Ashram'}</h3>
+                   </div>
+                </div>
                 <p className="text-ashram-sand/60 max-w-sm leading-relaxed text-lg">
                   {aboutContent?.footerDescription || 'A sanctuary for peace, meditation, and spiritual growth in the heart of Gujarat.'}
                 </p>
