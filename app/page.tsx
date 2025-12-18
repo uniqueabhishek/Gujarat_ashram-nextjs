@@ -104,17 +104,17 @@ export default function HomePage() {
                 if (item.variant === 'outline') {
                   buttonVariant = 'outline'
                   buttonClassName = isScrolled
-                    ? 'border-ashram-stone text-ashram-stone hover:bg-ashram-stone hover:text-white'
-                    : 'border-white/40 text-white hover:bg-white hover:text-ashram-clay'
+                    ? 'border-2 border-ashram-clay text-ashram-clay hover:bg-ashram-clay hover:text-white font-bold tracking-wide'
+                    : 'border-2 border-white text-white hover:bg-white hover:text-ashram-clay font-bold tracking-wide backdrop-blur-sm'
                 } else if (item.variant === 'ghost') {
                   buttonVariant = 'ghost'
                   buttonClassName = isScrolled
-                    ? 'text-ashram-stone hover:bg-ashram-stone/10'
-                    : 'text-white hover:bg-white/10'
+                    ? 'text-ashram-stone hover:text-ashram-amber hover:bg-ashram-amber/5 font-semibold'
+                    : 'text-white hover:text-ashram-sand hover:bg-white/10 font-semibold'
                 } else {
                   buttonClassName = isScrolled
-                    ? 'bg-ashram-amber hover:bg-ashram-amber/90 text-white'
-                    : 'bg-white text-ashram-clay hover:bg-white/90'
+                    ? 'bg-ashram-clay hover:bg-ashram-amber text-white font-bold shadow-md transition-all duration-300'
+                    : 'bg-ashram-amber text-white hover:bg-white hover:text-ashram-clay font-bold shadow-[0_0_15px_rgba(245,158,11,0.4)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] border border-white/20 transition-all duration-300 transform hover:-translate-y-0.5'
                 }
 
                 return (
@@ -122,7 +122,13 @@ export default function HomePage() {
                     key={i}
                     variant={buttonVariant}
                     className={buttonClassName}
-                    onClick={() => window.open(item.url, '_blank')}
+                    onClick={() => {
+                        if (item.url && item.url.length > 8 && item.url !== 'https://') {
+                             window.open(item.url, '_blank')
+                        } else {
+                            console.warn('Invalid URL:', item.url)
+                        }
+                    }}
                   >
                     {item.name}
                   </Button>
@@ -135,7 +141,11 @@ export default function HomePage() {
                   className={`text-sm font-medium tracking-wide hover:text-ashram-amber transition-colors ${
                     isScrolled ? 'text-ashram-stone' : 'text-white/90 hover:text-white'
                   }`}
-                  onClick={() => window.open(item.url, '_blank')}
+                  onClick={() => {
+                       if (item.url && item.url.length > 8 && item.url !== 'https://') {
+                             window.open(item.url, '_blank')
+                        }
+                  }}
                 >
                   {item.name}
                 </button>
@@ -173,7 +183,11 @@ export default function HomePage() {
                         key={i}
                         variant={item.variant === 'outline' ? 'outline' : item.variant === 'ghost' ? 'ghost' : 'default'}
                         className="w-full"
-                        onClick={() => window.open(item.url, '_blank')}
+                         onClick={() => {
+                            if (item.url && item.url.length > 8 && item.url !== 'https://') {
+                                 window.open(item.url, '_blank')
+                            }
+                        }}
                       >
                         {item.name}
                       </Button>
@@ -184,7 +198,11 @@ export default function HomePage() {
                     <button
                       key={i}
                       className="text-left text-ashram-stone hover:text-ashram-amber transition-colors py-2"
-                      onClick={() => window.open(item.url, '_blank')}
+                       onClick={() => {
+                            if (item.url && item.url.length > 8 && item.url !== 'https://') {
+                                 window.open(item.url, '_blank')
+                            }
+                        }}
                     >
                       {item.name}
                     </button>
@@ -471,11 +489,16 @@ export default function HomePage() {
                            <p className="text-ashram-stone text-sm leading-relaxed mb-3">{address.value}</p>
                            {address.url && (
                              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                               {/* Use a valid helper here would be better, but inline check is fine for now */}
                                <Button
                                  variant="outline"
                                  size="sm"
                                  className="w-full text-ashram-amber border-ashram-amber/30 hover:bg-ashram-amber/5"
-                                 onClick={() => window.open(address.url, "_blank")}
+                                 onClick={() => {
+                                    if (address.url && address.url.startsWith('http')) {
+                                      window.open(address.url, "_blank")
+                                    }
+                                 }}
                                >
                                  Get Directions <ArrowRight className="w-4 h-4 ml-2" />
                                </Button>
@@ -490,6 +513,11 @@ export default function HomePage() {
                           .filter((info) => info.type !== "address" && info.type !== "map" && info.isActive)
                           .map((contact, idx) => {
                             const Icon = contact.type === 'phone' || contact.type === 'whatsapp' ? Phone : Mail;
+                             let colorClass = "bg-ashram-amber/10 text-ashram-clay";
+                             if (contact.type === 'phone') colorClass = "bg-blue-100 text-blue-700";
+                             if (contact.type === 'whatsapp') colorClass = "bg-green-100 text-green-700";
+                             if (contact.type === 'email') colorClass = "bg-rose-100 text-rose-700";
+                             if (contact.url && contact.url.includes('http')) colorClass = "bg-violet-100 text-violet-700";
                             return (
                               <motion.button
                                 key={idx}
@@ -498,7 +526,7 @@ export default function HomePage() {
                                 onClick={() => contact.url && window.open(contact.url, "_blank")}
                                 className="flex items-center gap-3 p-3 rounded-xl bg-white border border-ashram-stone/10 hover:border-ashram-amber/50 hover:shadow-md transition-all text-left"
                               >
-                                <div className="p-2 rounded-lg bg-ashram-sand text-ashram-clay">
+                                <div className={`p-2 rounded-lg ${colorClass}`}>
                                   <Icon className="w-4 h-4" />
                                 </div>
                                 <div className="min-w-0">
@@ -520,7 +548,20 @@ export default function HomePage() {
                 className="flex-1 min-h-[300px] rounded-3xl bg-ashram-sand overflow-hidden shadow-lg border border-ashram-stone/20 relative group"
               >
                  <iframe
-                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.6576343362677!2d73.0766288759535!3d22.253034944605156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fb092d6e35579%3A0x6280463b22337d5c!2sThe%20Art%20of%20Living%20Gujarat%20Ashram!5e0!3m2!1sen!2sin!4v1703000000000!5m2!1sen!2sin"
+
+                    src={(() => {
+                      const mapItem = contactInfo.find(c => c.type === 'map');
+                      const defaultMap = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.6576343362677!2d73.0766288759535!3d22.253034944605156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fb092d6e35579%3A0x6280463b22337d5c!2sThe%20Art%20of%20Living%20Gujarat%20Ashram!5e0!3m2!1sen!2sin!4v1703000000000!5m2!1sen!2sin";
+
+                      if (!mapItem || !mapItem.value) return defaultMap;
+
+                      const val = mapItem.value.trim();
+                      if (val.startsWith('<iframe')) {
+                        const match = val.match(/src=["']([^"']+)["']/);
+                        return match ? match[1] : defaultMap;
+                      }
+                      return val;
+                    })()}
                    width="100%"
                    height="100%"
                    style={{ border: 0, minHeight: '300px' }}
