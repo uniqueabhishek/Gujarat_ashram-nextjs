@@ -59,7 +59,6 @@ export async function POST(request: NextRequest) {
         category,
         filename,
         path: `/images/${filename}`,
-        alt: file.name,
         order: (maxOrder?.order || 0) + 1,
       },
     })
