@@ -743,14 +743,16 @@ export default function HomePage() {
 
               {/* Newsletter */}
               <div className="max-w-sm">
-                <label className="text-sm font-medium text-ashram-sand/80 mb-2 block uppercase tracking-wider">Join our Newsletter</label>
+                <label htmlFor="newsletter-email" className="text-sm font-medium text-ashram-sand/80 mb-2 block uppercase tracking-wider">Join our Newsletter</label>
                 <div className="flex gap-2">
                   <input
+                    id="newsletter-email"
+                    name="email"
                     type="email"
                     placeholder="Enter your email"
                     className="bg-white/10 border border-white/20 rounded-lg px-4 py-2 flex-1 text-white placeholder:text-white/30 focus:outline-none focus:border-ashram-amber transition-colors"
                   />
-                  <Button className="bg-ashram-amber hover:bg-ashram-amber/90 text-ashram-clay font-bold">
+                  <Button type="button" className="bg-ashram-amber hover:bg-ashram-amber/90 text-ashram-clay font-bold">
                     Subscribe
                   </Button>
                 </div>
