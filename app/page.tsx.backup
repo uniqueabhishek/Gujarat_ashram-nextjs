@@ -91,15 +91,15 @@ export default function HomePage() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
             ? 'bg-white/70 backdrop-blur-xl border-b border-ashram-stone/5 shadow-sm py-3'
-            : 'bg-transparent py-4'
+            : 'bg-transparent py-6'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-end gap-2">
+          <div className="flex items-center gap-2">
             <img
               src="/images/aol-logo-transparent.png"
               alt="Art of Living Logo"
-              className={`h-12 w-auto transition-all duration-500 -translate-y-[5px] ${isScrolled ? '' : 'brightness-0 invert'}`}
+              className={`h-12 w-auto transition-all duration-500 ${isScrolled ? '' : 'brightness-0 invert'}`}
             />
             <div className="flex flex-col leading-tight">
               <span className="text-[10px] font-bold uppercase tracking-widest text-[#F59E0B]">The Art of Living</span>
@@ -729,8 +729,8 @@ export default function HomePage() {
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
               >
-                <div className="flex items-end gap-4 mb-6">
-                   <img src="/images/aol-logo-transparent.png" alt="Logo" className="h-16 w-auto brightness-0 invert opacity-90 -translate-y-[2px]" />
+                <div className="flex items-center gap-4 mb-6">
+                   <img src="/images/aol-logo-transparent.png" alt="Logo" className="h-16 w-auto brightness-0 invert opacity-90" />
                    <div>
                      <p className="text-xs uppercase tracking-widest text-[#F59E0B] font-bold mb-1">The Art of Living</p>
                      <h3 className="text-3xl font-serif font-bold leading-none">{aboutContent?.footerTitle || 'Sri Sri Gujarat Ashram'}</h3>
@@ -796,12 +796,9 @@ export default function HomePage() {
             </div>
           </div>
 
-        </div>
-
-        <div className="border-t border-white/10 relative z-20">
-          <div className="max-w-7xl mx-auto px-6 py-3 flex flex-col md:flex-row justify-start items-center gap-6 text-sm text-ashram-sand/40">
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-ashram-sand/40">
             <p>© 2025 Art of Living Gujarat Ashram. All rights reserved.</p>
-            <div className="flex gap-4">
+            <div className="flex gap-6">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             </div>
