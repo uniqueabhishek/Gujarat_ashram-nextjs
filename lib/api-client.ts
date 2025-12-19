@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3000'
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''
 
 // Helper function for API calls
 async function fetchAPI(endpoint: string, options?: RequestInit) {
