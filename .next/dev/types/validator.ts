@@ -137,19 +137,19 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../../app/api/images/by-category/[category]/route.ts
+// Validate ../../../app/api/images/[id]/route.ts
 {
-  type __IsExpected<Specific extends RouteHandlerConfig<"/api/images/by-category/[category]">> = Specific
-  const handler = {} as typeof import("../../../app/api/images/by-category/[category]/route.js")
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/images/[id]">> = Specific
+  const handler = {} as typeof import("../../../app/api/images/[id]/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
 }
 
-// Validate ../../../app/api/images/delete/[id]/route.ts
+// Validate ../../../app/api/images/by-category/[category]/route.ts
 {
-  type __IsExpected<Specific extends RouteHandlerConfig<"/api/images/delete/[id]">> = Specific
-  const handler = {} as typeof import("../../../app/api/images/delete/[id]/route.js")
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/images/by-category/[category]">> = Specific
+  const handler = {} as typeof import("../../../app/api/images/by-category/[category]/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

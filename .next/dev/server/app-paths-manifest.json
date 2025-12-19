@@ -6,6 +6,7 @@
   "/api/events/route": "app/api/events/route.js",
   "/api/footer-links/route": "app/api/footer-links/route.js",
   "/api/hero-buttons/route": "app/api/hero-buttons/route.js",
+  "/api/images/[id]/route": "app/api/images/[id]/route.js",
   "/api/images/by-category/[category]/route": "app/api/images/by-category/[category]/route.js",
   "/api/images/delete/[id]/route": "app/api/images/delete/[id]/route.js",
   "/api/images/reorder/route": "app/api/images/reorder/route.js",
