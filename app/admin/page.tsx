@@ -1451,7 +1451,7 @@ function ImageManager({
   const [previewImage, setPreviewImage] = useState<{ url: string; filename: string } | null>(null);
 
   // Get API base URL for image paths
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3000';
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || '';
 
   // Sortable Sensors
   const sensors = useSensors(
