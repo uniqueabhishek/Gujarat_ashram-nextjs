@@ -289,12 +289,14 @@ const AdminDashboard = () => {
             setImagesToDelete(new Set());
           }
 
-          // Update image orders
+          // Update image orders (excluding deleted ones)
           const allImageUpdates = [
-            ...heroImages.map((img, index) => ({ id: Number(img.id), order: index })),
-            ...heroMobileImages.map((img, index) => ({ id: Number(img.id), order: index })),
-            ...galleryImages.map((img, index) => ({ id: Number(img.id), order: index }))
-          ];
+            ...heroImages,
+            ...heroMobileImages,
+            ...galleryImages
+          ]
+          .filter(img => !imagesToDelete.has(img.id))
+          .map((img, index) => ({ id: Number(img.id), order: index }));
 
           if (allImageUpdates.length > 0) {
              await imagesAPI.reorder(allImageUpdates);
@@ -1637,7 +1639,7 @@ function ImageManager({
 
       {/* Pending Changes */}
        {imagesToDelete.size > 0 && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white px-6 py-4 rounded-full shadow-2xl border border-red-100 flex items-center gap-4 animate-in slide-in-from-bottom-10 z-40">
+        <div className="fixed bottom-8 right-8 bg-white px-6 py-4 rounded-full shadow-2xl border border-red-100 flex items-center gap-4 animate-in slide-in-from-bottom-10 z-40">
            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
              <Trash2 className="w-5 h-5" />
            </div>
