@@ -1,8 +1,12 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''
+// In production, use absolute URLs; in development, use relative
+const API_BASE = typeof window !== 'undefined'
+  ? window.location.origin
+  : process.env.NEXT_PUBLIC_API_BASE || ''
 
 // Helper function for API calls
 async function fetchAPI(endpoint: string, options?: RequestInit) {
   const url = `${API_BASE}${endpoint}`
+
   const response = await fetch(url, {
     ...options,
     headers: {
