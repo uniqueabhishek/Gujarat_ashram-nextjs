@@ -2,6 +2,10 @@
 
 A modern, high-performance web platform built with **Next.js 16**, designed for scalability and speed. This project demonstrates a production-ready architecture using the latest React Server Components and Server Actions.
 
+<p align="center">
+  <img src="public/images/screenshot-homepage.png" alt="Ashram Platform Homepage" width="800"/>
+</p>
+
 ## 🚀 Tech Stack
 
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
