@@ -1,7 +1,11 @@
 'use client'
 
 // AdminDashboard.tsx - Complete admin panel migrated to Next.js App Router
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -78,9 +82,12 @@ interface Event {
   id: string;
   title: string;
   date: string;
+  endDate?: string;
+  category?: string;
   description: string;
   buttonText?: string;
   buttonUrl?: string;
+  isActive?: boolean;
 }
 
 interface AboutContent {
@@ -696,92 +703,243 @@ function FooterEditor({ items, setItems }: EditorProps<FooterLink>) {
 
 // NEW: Events Editor
 function EventsEditor({ items, setItems }: EditorProps<Event>) {
-  const addItem = () => {
-    const newItem: Event = {
+  const [selectedEvent, setSelectedEvent] = useState<Partial<Event> | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Convert items to FullCalendar format
+  const calendarEvents = useMemo(() => {
+    return items.map(item => ({
+      id: item.id,
+      title: item.title,
+      start: item.date,
+      end: item.endDate || item.date,
+      backgroundColor: item.category === 'yoga' ? '#059669' : 
+                      item.category === 'meditation' ? '#78350F' : 
+                      item.category === 'celebration' ? '#F59E0B' : '#6B7280',
+      extendedProps: { ...item }
+    }));
+  }, [items]);
+
+  const handleDateSelect = (selectInfo: any) => {
+    const startDate = selectInfo.startStr;
+    const endDate = selectInfo.endStr;
+    
+    // FullCalendar endStr is exclusive, but we often want inclusive for courses.
+    // However, keeping it as-is is standard for FC.
+    
+    setSelectedEvent({
       id: Date.now().toString(),
-      title: "New Event",
-      date: "Date TBD",
-      description: "Event description here",
+      title: "",
+      date: startDate,
+      endDate: endDate,
+      category: "yoga",
+      description: "",
       buttonText: "Register Now",
       buttonUrl: "",
-    };
-    setItems([...items, newItem]);
+      isActive: true
+    });
+    setIsModalOpen(true);
   };
 
-  const removeItem = (index: number) => {
-    setItems(items.filter((_, i) => i !== index));
+  const handleEventClick = (clickInfo: any) => {
+    const event = items.find(i => i.id === clickInfo.event.id);
+    if (event) {
+      setSelectedEvent({ ...event });
+      setIsModalOpen(true);
+    }
   };
 
-  const updateItem = (index: number, field: string, value: string) => {
-    const updated = [...items];
-    updated[index] = { ...updated[index], [field]: value };
-    setItems(updated);
+  const saveEvent = () => {
+    if (!selectedEvent || !selectedEvent.title) return;
+
+    const exists = items.find(i => i.id === selectedEvent.id);
+    if (exists) {
+      setItems(items.map(i => i.id === selectedEvent.id ? (selectedEvent as Event) : i));
+    } else {
+      setItems([...items, selectedEvent as Event]);
+    }
+    setIsModalOpen(false);
+    setSelectedEvent(null);
+  };
+
+  const deleteEvent = () => {
+    if (!selectedEvent) return;
+    setItems(items.filter(i => i.id !== selectedEvent.id));
+    setIsModalOpen(false);
+    setSelectedEvent(null);
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Upcoming Events</h2>
-      <p className="text-sm text-gray-600 mb-4">
-        Manage events that appear on the homepage
-      </p>
-
-      <div className="space-y-4">
-        {items.map((item, idx) => (
-          <Card key={idx} className="p-4">
-            <div className="space-y-3">
-              <div className="flex gap-2">
-                <input
-                  className="flex-1 px-3 py-2 border rounded"
-                  placeholder="Event Title"
-                  value={item.title}
-                  onChange={(e) => updateItem(idx, "title", e.target.value)}
-                />
-                <Button
-                  variant="outline"
-                  size="default"
-                  onClick={() => removeItem(idx)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-
-              <input
-                className="w-full px-3 py-2 border rounded"
-                placeholder="Date (e.g., Dec 5 - Dec 7, 2025)"
-                value={item.date}
-                onChange={(e) => updateItem(idx, "date", e.target.value)}
-              />
-
-              <textarea
-                className="w-full px-3 py-2 border rounded"
-                placeholder="Event Description"
-                rows={2}
-                value={item.description}
-                onChange={(e) => updateItem(idx, "description", e.target.value)}
-              />
-
-              <div className="flex gap-2">
-                <input
-                  className="flex-1 px-3 py-2 border rounded"
-                  placeholder="Button Text"
-                  value={item.buttonText || "Register Now"}
-                  onChange={(e) => updateItem(idx, "buttonText", e.target.value)}
-                />
-                <input
-                  className="flex-1 px-3 py-2 border rounded"
-                  placeholder="Registration URL (optional)"
-                  value={item.buttonUrl || ""}
-                  onChange={(e) => updateItem(idx, "buttonUrl", e.target.value)}
-                />
-              </div>
-            </div>
-          </Card>
-        ))}
+    <div className="relative">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800">Sacred Schedule Manager</h2>
+          <p className="text-sm text-gray-500">Click a date to add a course, or click an event to edit.</p>
+        </div>
+        <div className="flex gap-4 text-xs font-medium">
+           <div className="flex items-center gap-1"><span className="w-3 h-3 bg-emerald-600 rounded-full"></span> Yoga</div>
+           <div className="flex items-center gap-1"><span className="w-3 h-3 bg-amber-900 rounded-full"></span> Meditation</div>
+           <div className="flex items-center gap-1"><span className="w-3 h-3 bg-amber-500 rounded-full"></span> Events</div>
+        </div>
       </div>
 
-      <Button onClick={addItem} variant="outline" className="mt-4 w-full">
-        <Plus className="w-4 h-4 mr-2" /> Add Event
-      </Button>
+      <div className="admin-calendar-wrapper bg-white p-4 rounded-xl border shadow-inner min-h-[600px]">
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek'
+          }}
+          events={calendarEvents}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          select={handleDateSelect}
+          eventClick={handleEventClick}
+          height="700px"
+        />
+      </div>
+
+      {/* Modern Modal Overlay */}
+      {isModalOpen && selectedEvent && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
+            <div className="bg-orange-50 px-6 py-4 border-b border-orange-100 flex justify-between items-center">
+              <h3 className="font-bold text-orange-900 text-lg">
+                {items.find(i => i.id === selectedEvent.id) ? 'Edit Course / Event' : 'Schedule New Entry'}
+              </h3>
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="p-1 hover:bg-orange-200 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-orange-800" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4 overflow-y-auto">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-500 uppercase">Event Title</label>
+                <input
+                  autoFocus
+                  className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all"
+                  placeholder="e.g., Sahaj Samadhi Meditation Course"
+                  value={selectedEvent.title}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, title: e.target.value })}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-500 uppercase">Category</label>
+                  <select
+                    className="w-full px-4 py-2 border rounded-xl outline-none"
+                    value={selectedEvent.category}
+                    onChange={(e) => setSelectedEvent({ ...selectedEvent, category: e.target.value })}
+                  >
+                    <option value="yoga">Yoga Course</option>
+                    <option value="meditation">Meditation</option>
+                    <option value="celebration">Celebration/Event</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-500 uppercase">Status</label>
+                  <div className="flex items-center h-10 gap-2">
+                    <input 
+                      type="checkbox" 
+                      id="isActive"
+                      checked={selectedEvent.isActive}
+                      onChange={(e) => setSelectedEvent({ ...selectedEvent, isActive: e.target.checked })}
+                      className="w-4 h-4 accent-orange-500"
+                    />
+                    <label htmlFor="isActive" className="text-sm text-gray-600">Active & Visible</label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-500 uppercase">Start Date</label>
+                  <input
+                    type="date"
+                    className="w-full px-4 py-2 border rounded-xl outline-none"
+                    value={selectedEvent.date}
+                    onChange={(e) => setSelectedEvent({ ...selectedEvent, date: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-500 uppercase">End Date</label>
+                  <input
+                    type="date"
+                    className="w-full px-4 py-2 border rounded-xl outline-none"
+                    value={selectedEvent.endDate}
+                    onChange={(e) => setSelectedEvent({ ...selectedEvent, endDate: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-500 uppercase">Description</label>
+                <textarea
+                  className="w-full px-4 py-2 border rounded-xl outline-none min-h-[100px]"
+                  placeholder="Tell participants about this course..."
+                  value={selectedEvent.description}
+                  onChange={(e) => setSelectedEvent({ ...selectedEvent, description: e.target.value })}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-500 uppercase">Button Text</label>
+                  <input
+                    className="w-full px-4 py-2 border rounded-xl outline-none"
+                    placeholder="Register Now"
+                    value={selectedEvent.buttonText}
+                    onChange={(e) => setSelectedEvent({ ...selectedEvent, buttonText: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-500 uppercase">Link URL</label>
+                  <input
+                    className="w-full px-4 py-2 border rounded-xl outline-none"
+                    placeholder="https://..."
+                    value={selectedEvent.buttonUrl}
+                    onChange={(e) => setSelectedEvent({ ...selectedEvent, buttonUrl: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 bg-gray-50 border-t flex justify-between gap-3">
+              <Button 
+                variant="ghost" 
+                onClick={deleteEvent}
+                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="w-4 h-4 mr-2" /> Delete
+              </Button>
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                <Button onClick={saveEvent} className="bg-orange-500 hover:bg-orange-600 text-white px-6">
+                  Confirm
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <style jsx global>{`
+        .admin-calendar-wrapper .fc-toolbar-title { font-size: 1.25rem; font-weight: 700; color: #374151; }
+        .admin-calendar-wrapper .fc-button-primary { background-color: #f97316; border-color: #f97316; }
+        .admin-calendar-wrapper .fc-button-primary:hover { background-color: #ea580c; border-color: #ea580c; }
+        .admin-calendar-wrapper .fc-event { border: none; cursor: pointer; transition: opacity 0.2s; border-radius: 4px; padding: 2px 4px; }
+        .admin-calendar-wrapper .fc-event:hover { opacity: 0.9; }
+        .admin-calendar-wrapper .fc-day-today { background: #fff7ed !important; }
+        .admin-calendar-wrapper .fc-highlight { background: rgba(249, 115, 22, 0.1) !important; }
+      `}</style>
     </div>
   );
 }
@@ -1394,6 +1552,7 @@ function SortableImage({
         src={`${API_BASE}${image.path}`}
         alt={image.filename}
         fill
+        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
         className={`object-cover transition-all ${
           isMarkedForDelete ? "grayscale opacity-50" : "group-hover:scale-105"
         }`}
@@ -1670,7 +1829,7 @@ function ImageManager({
       {previewImage && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4" onClick={() => setPreviewImage(null)}>
            <div className="relative w-full h-full">
-             <Image src={previewImage.url} alt="Preview" fill unoptimized className="object-contain rounded" />
+             <Image src={previewImage.url} alt="Preview" fill unoptimized sizes="100vw" className="object-contain rounded" />
            </div>
         </div>
       )}
