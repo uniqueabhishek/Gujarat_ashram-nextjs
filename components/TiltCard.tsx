@@ -15,17 +15,17 @@ export function TiltCard({ children, className = '' }: TiltCardProps) {
   useEffect(() => {
     if (tiltRef.current) {
       VanillaTilt.init(tiltRef.current, {
-        max: 5,
-        speed: 400,
-        glare: true,
-        'max-glare': 0.15,
-        scale: 1.02
+        max: 3,
+        speed: 600,
+        glare: false,
+        'max-glare': 0.1,
+        scale: 1.01
       })
     }
   }, [])
 
   return (
-    <div ref={tiltRef} className={`transform-style-3d ${className}`}>
+    <div ref={tiltRef} className={`transform-style-3d will-change-transform ${className}`} style={{ perspective: '1000px' }}>
         {children}
     </div>
   )

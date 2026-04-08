@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${outfit.variable} ${playfair.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`scroll-smooth ${outfit.variable} ${playfair.variable}`}>
       <body suppressHydrationWarning>
         <SmoothScroll>
           <ScrollProgress />

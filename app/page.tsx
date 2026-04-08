@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { Menu, X, MapPin, Navigation as NavigationIcon, Phone, Mail, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -9,11 +10,20 @@ import { EffectFade, Autoplay, Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
-import { aboutAPI, infoCardsAPI, eventsAPI, menuItemsAPI, heroButtonsAPI, imagesAPI, contactAPI, footerLinksAPI } from '@/lib/api-client'
+import { aboutAPI, infoCardsAPI, eventsAPI, menuItemsAPI, heroButtonsAPI, imagesAPI, contactAPI, footerLinksAPI, socialLinksAPI, footerButtonsAPI } from '@/lib/api-client'
 import { getIconComponent } from '@/lib/iconMapping'
 import { ZenPreloader } from '@/components/ZenPreloader'
 import { TiltCard } from '@/components/TiltCard'
 import Image from 'next/image'
+
+// Smooth scroll function for anchor links
+const scrollToSection = (e: React.MouseEvent<HTMLElement>, url: string) => {
+  if (url.startsWith('#')) {
+    e.preventDefault()
+    const element = document.querySelector(url)
+    element?.scrollIntoView({ behavior: 'smooth' })
+  }
+}
 
 export default function HomePage() {
   const [aboutContent, setAboutContent] = useState<any>(null)
@@ -26,6 +36,8 @@ export default function HomePage() {
   const [galleryImages, setGalleryImages] = useState<any[]>([])
   const [contactInfo, setContactInfo] = useState<any[]>([])
   const [footerLinks, setFooterLinks] = useState<any[]>([])
+  const [socialLinks, setSocialLinks] = useState<any[]>([])
+  const [footerButtons, setFooterButtons] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -41,16 +53,23 @@ export default function HomePage() {
   }, [])
 
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 50)
+          ticking = false
+        })
+        ticking = true
+      }
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const loadContent = async () => {
     try {
-      const [about, cards, eventsData, menu, hero, heroImgs, heroMobileImgs, galleryImgs, contact, fLinks] = await Promise.all([
+      const [about, cards, eventsData, menu, hero, heroImgs, heroMobileImgs, galleryImgs, contact, fLinks, social, fbtn] = await Promise.all([
         aboutAPI.get(),
         infoCardsAPI.getAll(),
         eventsAPI.getAll(),
@@ -62,6 +81,8 @@ export default function HomePage() {
         imagesAPI.getByCategory('gallery'),
         contactAPI.getAll(),
         footerLinksAPI.getAll(),
+        socialLinksAPI.getAll(),
+        footerButtonsAPI.getAll(),
       ])
 
       setAboutContent(about)
@@ -74,6 +95,8 @@ export default function HomePage() {
       setGalleryImages(galleryImgs)
       setContactInfo(contact)
       setFooterLinks(fLinks)
+      setSocialLinks(social)
+      setFooterButtons(fbtn)
     } catch (error) {
       console.error('Error loading content:', error)
     } finally {
@@ -136,37 +159,28 @@ export default function HomePage() {
                 }
 
                 return (
-                  <Button
-                    key={i}
-                    variant={buttonVariant}
-                    className={buttonClassName}
-                    onClick={() => {
-                        if (item.url && item.url.length > 8 && item.url !== 'https://') {
-                             window.open(item.url, '_blank')
-                        } else {
-                            console.warn('Invalid URL:', item.url)
-                        }
-                    }}
-                  >
-                    {item.name}
-                  </Button>
+                  <Link key={i} href={item.url}>
+                    <Button
+                      variant={buttonVariant}
+                      className={buttonClassName}
+                    >
+                      {item.name}
+                    </Button>
+                  </Link>
                 )
               }
 
               return (
-                <button
+                <a
                   key={i}
+                  href={item.url}
+                  onClick={(e) => scrollToSection(e, item.url)}
                   className={`text-sm font-medium tracking-wide hover:text-ashram-amber transition-colors ${
                     isScrolled ? 'text-ashram-stone' : 'text-white/90 hover:text-white'
                   }`}
-                  onClick={() => {
-                       if (item.url && item.url.length > 8 && item.url !== 'https://') {
-                             window.open(item.url, '_blank')
-                        }
-                  }}
                 >
                   {item.name}
-                </button>
+                </a>
               )
             })}
           </div>
@@ -197,33 +211,30 @@ export default function HomePage() {
                 {menuItems.map((item, i) => {
                   if (item.isSpecial) {
                     return (
-                      <Button
-                        key={i}
-                        variant={item.variant === 'outline' ? 'outline' : item.variant === 'ghost' ? 'ghost' : 'default'}
-                        className="w-full"
-                         onClick={() => {
-                            if (item.url && item.url.length > 8 && item.url !== 'https://') {
-                                 window.open(item.url, '_blank')
-                            }
-                        }}
-                      >
-                        {item.name}
-                      </Button>
+                      <Link key={i} href={item.url}>
+                        <Button
+                          variant={item.variant === 'outline' ? 'outline' : item.variant === 'ghost' ? 'ghost' : 'default'}
+                          className="w-full"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Button>
+                      </Link>
                     )
                   }
 
                   return (
-                    <button
+                    <a
                       key={i}
+                      href={item.url}
+                      onClick={(e) => {
+                        scrollToSection(e, item.url)
+                        setMobileMenuOpen(false)
+                      }}
                       className="text-left text-ashram-stone hover:text-ashram-amber transition-colors py-2"
-                       onClick={() => {
-                            if (item.url && item.url.length > 8 && item.url !== 'https://') {
-                                 window.open(item.url, '_blank')
-                            }
-                        }}
                     >
                       {item.name}
-                    </button>
+                    </a>
                   )
                 })}
               </div>
@@ -234,7 +245,7 @@ export default function HomePage() {
 
       {/* Hero Section with Image Carousel */}
       <header className="relative h-[85vh] min-h-[600px] overflow-hidden">
-        <motion.div style={{ y: heroBgY }} className="absolute inset-0">
+        <motion.div style={{ y: heroBgY }} className="absolute inset-0 will-change-transform">
           {/* Desktop Slider (Hidden on Mobile if Mobile Images exist) */}
           <div className={`${heroMobileImages.length > 0 ? 'hidden md:block' : 'block'} h-full w-full`}>
             {heroImages.length > 0 ? (
@@ -244,7 +255,7 @@ export default function HomePage() {
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
                 navigation={false}
                 pagination={{ clickable: true, dynamicBullets: true }}
-                loop
+                loop={heroImages.length > 1}
                 className="h-full w-full"
               >
                 {heroImages.map((img, i) => (
@@ -278,7 +289,7 @@ export default function HomePage() {
                  autoplay={{ delay: 5000, disableOnInteraction: false }}
                  navigation={false}
                  pagination={{ clickable: true, dynamicBullets: true }}
-                 loop
+                 loop={heroMobileImages.length > 1}
                  className="h-full w-full"
                >
                  {heroMobileImages.map((img, i) => (
@@ -303,7 +314,7 @@ export default function HomePage() {
         <div className="relative z-10 h-full flex items-center justify-center text-center px-6">
           <motion.div
             style={{ y: heroTextY }}
-            className="max-w-4xl"
+            className="max-w-4xl will-change-transform"
             initial="hidden"
             animate="visible"
             variants={{
@@ -311,7 +322,8 @@ export default function HomePage() {
               visible: {
                 opacity: 1,
                 transition: {
-                  staggerChildren: 0.15
+                  staggerChildren: 0.1,
+                  duration: 0.8
                 }
               }
             }}
@@ -386,14 +398,15 @@ export default function HomePage() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Button
-                      variant={variant}
-                      size="lg"
-                      className={className}
-                      onClick={() => window.open(button.url, '_blank')}
-                    >
-                      {button.name}
-                    </Button>
+                    <Link href={button.url}>
+                      <Button
+                        variant={variant}
+                        size="lg"
+                        className={className}
+                      >
+                        {button.name}
+                      </Button>
+                    </Link>
                   </motion.div>
                 )
               })}
@@ -404,7 +417,7 @@ export default function HomePage() {
 
       {/* Info Cards Section */}
       {infoCards.length > 0 && (
-        <section className="py-20 px-4 bg-white">
+        <section id="programs" className="py-20 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -423,7 +436,8 @@ export default function HomePage() {
                 hidden: {},
                 visible: {
                   transition: {
-                    staggerChildren: 0.2
+                    staggerChildren: 0.08,
+                    delayChildren: 0
                   }
                 }
               }}
@@ -456,7 +470,7 @@ export default function HomePage() {
       )}
 
       {/* Combined Why Visit & Contact Section */}
-      <section className="py-20 px-6 bg-white overflow-hidden">
+      <section id="about" className="py-20 px-6 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
 
           {/* Left Column: Why Visit Text + Gallery Grid */}
@@ -489,7 +503,7 @@ export default function HomePage() {
                 variants={{
                   hidden: {},
                   visible: {
-                    transition: { staggerChildren: 0.1 }
+                    transition: { staggerChildren: 0.05 }
                   }
                 }}
               >
@@ -644,7 +658,7 @@ export default function HomePage() {
 
       {/* Events Section */}
       {events.length > 0 && (
-        <section className="py-20 px-4 bg-ashram-sand/30">
+        <section id="events" className="py-20 px-4 bg-ashram-sand/30">
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-end mb-12 px-2">
               <motion.div
@@ -657,9 +671,14 @@ export default function HomePage() {
                   Upcoming Events
                 </h2>
               </motion.div>
-              <Button variant="ghost" className="hidden md:flex gap-2 text-ashram-stone hover:text-ashram-clay">
-                View All Events <ArrowRight className="w-4 h-4" />
-              </Button>
+              <Link href="/calendar">
+                <Button
+                  variant="ghost"
+                  className="hidden md:flex gap-2 text-ashram-stone hover:text-ashram-clay"
+                >
+                  View Full Calendar <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
             </div>
 
             <motion.div
@@ -670,7 +689,7 @@ export default function HomePage() {
               variants={{
                 hidden: {},
                 visible: {
-                  transition: { staggerChildren: 0.15 }
+                  transition: { staggerChildren: 0.08 }
                 }
               }}
             >
@@ -699,16 +718,21 @@ export default function HomePage() {
             </motion.div>
 
             <div className="mt-8 text-center md:hidden">
-               <Button variant="ghost" className="gap-2 text-ashram-stone hover:text-ashram-clay">
-                View All Events <ArrowRight className="w-4 h-4" />
-              </Button>
+              <Link href="/calendar">
+                <Button
+                  variant="ghost"
+                  className="gap-2 text-ashram-stone hover:text-ashram-clay"
+                >
+                  View Full Calendar <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
       )}
 
       {/* Mega Footer */}
-      <footer className="bg-ashram-clay text-white pt-10 pb-6 px-6 relative overflow-hidden">
+      <footer id="contact" className="bg-ashram-clay text-white pt-10 pb-6 px-6 relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5 pointer-events-none">
            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -767,6 +791,24 @@ export default function HomePage() {
               </div>
             </div>
 
+            {/* Action Buttons */}
+            {footerButtons.length > 0 && (
+              <div>
+                <h4 className="font-bold text-lg mb-6 text-ashram-amber">Actions</h4>
+                <div className="flex flex-col gap-3">
+                  {footerButtons.map((btn: any, i: number) => (
+                    <Link key={i} href={btn.url}>
+                      <button
+                        className="w-full px-4 py-2 border border-ashram-amber/30 text-ashram-sand hover:bg-ashram-amber hover:text-ashram-clay rounded-lg transition-colors font-medium"
+                      >
+                        {btn.label}
+                      </button>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Quick Links */}
             <div>
               <h4 className="font-bold text-lg mb-6 text-ashram-amber">Quick Links</h4>
@@ -807,11 +849,33 @@ export default function HomePage() {
         </div>
 
         <div className="border-t border-white/10 relative z-20">
-          <div className="max-w-7xl mx-auto px-6 py-3 flex flex-col md:flex-row justify-start items-center gap-6 text-sm text-ashram-sand/40">
-            <p>© 2025 Art of Living Gujarat Ashram. All rights reserved.</p>
-            <div className="flex gap-4">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+          <div className="max-w-7xl mx-auto px-6 py-6">
+            {/* Social Links */}
+            {socialLinks.length > 0 && (
+              <div className="mb-4 flex gap-4">
+                {socialLinks.map((link: any, i: number) => (
+                  <a
+                    key={i}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-white/10 hover:bg-ashram-amber flex items-center justify-center transition-colors text-white hover:text-ashram-clay"
+                    title={link.platform}
+                  >
+                    {link.platform === 'facebook' && '📱'}
+                    {link.platform === 'instagram' && '📸'}
+                    {link.platform === 'youtube' && '▶️'}
+                    {link.platform === 'twitter' && '𝕏'}
+                  </a>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-ashram-sand/40 pt-4">
+              <p>© 2025 Art of Living Gujarat Ashram. All rights reserved.</p>
+              <div className="flex gap-4">
+                <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+              </div>
             </div>
           </div>
         </div>
