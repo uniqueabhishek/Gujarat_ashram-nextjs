@@ -1,22 +1,33 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-const fs = require('fs');
+import 'dotenv/config';
+import postgres from 'postgres';
+import * as dotenv from 'dotenv';
 
-const dbPath = path.join(process.cwd(), 'prisma', 'dev.db');
-console.log('--- DB AUDIT ---');
-console.log('Path:', dbPath);
-console.log('Exists:', fs.existsSync(dbPath));
+dotenv.config({ path: '.env.local', override: true });
+dotenv.config();
 
-if (fs.existsSync(dbPath)) {
-    const db = new sqlite3.Database(dbPath);
-    db.all("SELECT name FROM sqlite_master WHERE type='table'", (err, rows) => {
-        if (err) {
-            console.error('Error:', err.message);
-        } else {
-            console.log('Tables Found:', rows.map(r => r.name).join(', '));
-        }
-        db.close();
-    });
-} else {
-    console.log('ERROR: The database file does not exist at the expected path.');
+async function verifyDb() {
+  console.log('--- DB AUDIT (PostgreSQL) ---');
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl || dbUrl.includes('placeholder_host')) {
+    console.error('ERROR: Valid DATABASE_URL not found in .env.local');
+    process.exit(1);
+  }
+
+  console.log('Connecting to database...');
+  const sql = postgres(dbUrl);
+
+  try {
+    const tables = await sql`
+      SELECT tablename 
+      FROM pg_catalog.pg_tables 
+      WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';
+    `;
+    console.log('Tables Found:', tables.map(r => r.tablename).join(', '));
+  } catch (err) {
+    console.error('Error connecting to database:', err.message);
+  } finally {
+    await sql.end();
+  }
 }
+
+verifyDb();
