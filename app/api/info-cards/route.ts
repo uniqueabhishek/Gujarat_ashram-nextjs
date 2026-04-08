@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, infoCard } from '@/lib/db'
 
 export async function GET() {
   try {
-    const cards = await prisma.infoCard.findMany({
-      orderBy: { order: 'asc' },
+    const cards = await db.query.infoCard.findMany({
+      orderBy: (infoCard, { asc }) => [asc(infoCard.order)],
     })
+
     return NextResponse.json(cards)
   } catch (error) {
     console.error('Error fetching info cards:', error)
@@ -19,20 +20,25 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const cards = await request.json()
-    await prisma.infoCard.deleteMany()
+    const now = new Date()
 
-    const created = await Promise.all(
-      cards.map((card: any, index: number) =>
-        prisma.infoCard.create({
-          data: {
+    const created = await db.transaction(async (tx) => {
+      await tx.delete(infoCard)
+      return await tx
+        .insert(infoCard)
+        .values(
+          cards.map((card: any, index: number) => ({
             icon: card.icon,
             title: card.title,
             description: card.description,
             order: index,
-          },
-        })
-      )
-    )
+            isActive: card.isActive !== false,
+            createdAt: now,
+            updatedAt: now,
+          }))
+        )
+        .returning()
+    })
 
     return NextResponse.json(created)
   } catch (error) {

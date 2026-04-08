@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, footerLink } from '@/lib/db'
 
 export async function GET() {
   try {
-    const links = await prisma.footerLink.findMany({
-      orderBy: { order: 'asc' },
+    const links = await db.query.footerLink.findMany({
+      orderBy: (footerLink, { asc }) => [asc(footerLink.order)],
     })
+
     return NextResponse.json(links)
   } catch (error) {
     console.error('Error fetching footer links:', error)
@@ -19,19 +20,23 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const links = await request.json()
-    await prisma.footerLink.deleteMany()
+    const now = new Date()
 
-    const created = await Promise.all(
-      links.map((link: any, index: number) =>
-        prisma.footerLink.create({
-          data: {
+    const created = await db.transaction(async (tx) => {
+      await tx.delete(footerLink)
+      return await tx
+        .insert(footerLink)
+        .values(
+          links.map((link: any, index: number) => ({
             label: link.label,
             url: link.url,
             order: index,
-          },
-        })
-      )
-    )
+            createdAt: now,
+            updatedAt: now,
+          }))
+        )
+        .returning()
+    })
 
     return NextResponse.json(created)
   } catch (error) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, siteImage } from '@/lib/db'
+import { eq } from 'drizzle-orm'
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,24 +8,23 @@ export async function POST(request: NextRequest) {
 
     if (!Array.isArray(updates)) {
       return NextResponse.json(
-        { error: 'Invalid data format' },
+        { error: 'updates must be an array' },
         { status: 400 }
       )
     }
 
-    // Update orders in a transaction
-    await prisma.$transaction(
-      updates.map(({ id, order }) =>
-        prisma.siteImage.update({
-          where: { id: Number(id) },
-          data: { order: Number(order) },
-        })
-      )
-    )
+    await db.transaction(async (tx) => {
+      for (const { id, order } of updates) {
+        await tx
+          .update(siteImage)
+          .set({ order: Number(order) })
+          .where(eq(siteImage.id, Number(id)))
+      }
+    })
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Reorder error:', error)
+    console.error('Reorder images error:', error)
     return NextResponse.json(
       { error: 'Failed to reorder images' },
       { status: 500 }

@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, event } from '@/lib/db'
 
 export async function GET() {
   try {
-    const events = await prisma.event.findMany({
-      orderBy: { date: 'asc' },
+    const events = await db.query.event.findMany({
+      orderBy: (event, { asc }) => [asc(event.date)],
     })
+
     return NextResponse.json(events)
   } catch (error) {
     console.error('Error fetching events:', error)
@@ -18,22 +19,22 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const events = await request.json()
+    const data = await request.json()
+    const events = Array.isArray(data) ? data : [data]
+    const now = new Date()
 
-    // If it's an array, replace all events
-    if (Array.isArray(events)) {
-      await prisma.event.deleteMany()
-      const created = await Promise.all(
-        events.map((event: any) =>
-          prisma.event.create({ data: event })
-        )
-      )
-      return NextResponse.json(created)
-    }
+    const eventsWithTimestamps = events.map((e: any) => ({
+      ...e,
+      createdAt: e.createdAt || now,
+      updatedAt: e.updatedAt || now,
+    }))
 
-    // If it's a single event, create it
-    const event = await prisma.event.create({ data: events })
-    return NextResponse.json(event)
+    const created = await db.transaction(async (tx) => {
+      await tx.delete(event)
+      return await tx.insert(event).values(eventsWithTimestamps).returning()
+    })
+
+    return NextResponse.json(created)
   } catch (error) {
     console.error('Save events error:', error)
     return NextResponse.json(

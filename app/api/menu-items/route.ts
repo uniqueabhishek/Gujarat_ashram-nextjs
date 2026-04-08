@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, menuItem } from '@/lib/db'
 
 export async function GET() {
   try {
-    const items = await prisma.menuItem.findMany({
-      orderBy: { order: 'asc' },
+    const items = await db.query.menuItem.findMany({
+      orderBy: (menuItem, { asc }) => [asc(menuItem.order)],
     })
+
     return NextResponse.json(items)
   } catch (error) {
     console.error('Error fetching menu items:', error)
@@ -19,24 +20,25 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const items = await request.json()
+    const now = new Date()
 
-    // Delete existing items
-    await prisma.menuItem.deleteMany()
-
-    // Create new items
-    const created = await Promise.all(
-      items.map((item: any, index: number) =>
-        prisma.menuItem.create({
-          data: {
+    const created = await db.transaction(async (tx) => {
+      await tx.delete(menuItem)
+      return await tx
+        .insert(menuItem)
+        .values(
+          items.map((item: any, index: number) => ({
             name: item.name,
             url: item.url,
             isSpecial: item.isSpecial || false,
             variant: item.variant || 'default',
             order: index,
-          },
-        })
-      )
-    )
+            createdAt: now,
+            updatedAt: now,
+          }))
+        )
+        .returning()
+    })
 
     return NextResponse.json(created)
   } catch (error) {

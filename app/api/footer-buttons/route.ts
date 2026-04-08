@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, footerButton } from '@/lib/db'
 
 export async function GET() {
   try {
-    const buttons = await prisma.footerButton.findMany({
-      orderBy: { order: 'asc' },
+    const buttons = await db.query.footerButton.findMany({
+      orderBy: (footerButton, { asc }) => [asc(footerButton.order)],
     })
 
     return NextResponse.json(buttons)
@@ -20,23 +20,24 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const buttons = await request.json()
+    const now = new Date()
 
-    // Delete existing
-    await prisma.footerButton.deleteMany()
-
-    // Create new buttons
-    const created = await Promise.all(
-      buttons.map((button: any, index: number) =>
-        prisma.footerButton.create({
-          data: {
+    const created = await db.transaction(async (tx) => {
+      await tx.delete(footerButton)
+      return await tx
+        .insert(footerButton)
+        .values(
+          buttons.map((button: any, index: number) => ({
             label: button.label,
             url: button.url,
             order: index,
             isActive: button.isActive !== false,
-          },
-        })
-      )
-    )
+            createdAt: now,
+            updatedAt: now,
+          }))
+        )
+        .returning()
+    })
 
     return NextResponse.json(created)
   } catch (error) {

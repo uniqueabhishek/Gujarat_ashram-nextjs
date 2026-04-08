@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, siteImage } from '@/lib/db'
+import { eq } from 'drizzle-orm'
 
 export async function GET(
   request: NextRequest,
@@ -7,9 +8,9 @@ export async function GET(
 ) {
   try {
     const { category } = await params
-    const images = await prisma.siteImage.findMany({
-      where: { category },
-      orderBy: { order: 'asc' },
+    const images = await db.query.siteImage.findMany({
+      where: (siteImage, { eq }) => eq(siteImage.category, category),
+      orderBy: (siteImage, { asc }) => [asc(siteImage.order)],
     })
 
     return NextResponse.json(images)

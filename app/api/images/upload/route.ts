@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
-import { prisma } from '@/lib/prisma'
+import { db, siteImage } from '@/lib/db'
+import { desc, eq } from 'drizzle-orm'
+
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+const MAX_SIZE = 5 * 1024 * 1024 // 5MB
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,62 +14,64 @@ export async function POST(request: NextRequest) {
     const category = (formData.get('category') as string) || 'general'
 
     if (!file) {
-      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
-    if (!allowedTypes.includes(file.type)) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: 'Invalid file type. Only JPEG, PNG, GIF, and WebP allowed.' },
+        { error: 'Invalid file type. Allowed: jpg, png, gif, webp' },
         { status: 400 }
       )
     }
 
-    // Validate file size (5MB limit)
-    const maxSize = 5 * 1024 * 1024
-    if (file.size > maxSize) {
+    // Validate file size
+    if (file.size > MAX_SIZE) {
       return NextResponse.json(
-        { error: 'File too large. Maximum size is 5MB.' },
+        { error: 'File too large. Max 5MB' },
         { status: 400 }
       )
     }
 
-    // Generate unique filename
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`
-    const ext = file.name.split('.').pop()
-    const filename = `${uniqueSuffix}.${ext}`
+    // Get file extension
+    const ext = file.type.split('/')[1]
+    const timestamp = Date.now()
+    const random = Math.random().toString(36).substring(7)
+    const filename = `${timestamp}-${random}.${ext}`
 
-    // Ensure upload directory exists
-    const uploadDir = join(process.cwd(), 'public', 'images')
-    await mkdir(uploadDir, { recursive: true })
+    // Ensure directory exists
+    const imagesDir = join(process.cwd(), 'public', 'images')
+    await mkdir(imagesDir, { recursive: true })
 
     // Write file
-    const filePath = join(uploadDir, filename)
-    await writeFile(filePath, buffer)
+    const filepath = join(imagesDir, filename)
+    const bytes = await file.arrayBuffer()
+    await writeFile(filepath, Buffer.from(bytes))
 
-    // Get current max order
-    const maxOrder = await prisma.siteImage.findFirst({
-      where: { category },
-      orderBy: { order: 'desc' },
-      select: { order: true },
-    })
+    // Get current max order for this category
+    const maxOrderResult = await db
+      .select({ order: siteImage.order })
+      .from(siteImage)
+      .where(eq(siteImage.category, category))
+      .orderBy(desc(siteImage.order))
+      .limit(1)
 
-    // Save to database
-    const image = await prisma.siteImage.create({
-      data: {
+    const nextOrder = (maxOrderResult[0]?.order || 0) + 1
+
+    // Create database record
+    const result = await db
+      .insert(siteImage)
+      .values({
         category,
         filename,
         path: `/images/${filename}`,
-        order: (maxOrder?.order || 0) + 1,
-      },
-    })
+        order: nextOrder,
+      })
+      .returning()
 
-    return NextResponse.json(image)
+    return NextResponse.json(result[0])
   } catch (error) {
-    console.error('Upload error:', error)
+    console.error('Upload image error:', error)
     return NextResponse.json(
       { error: 'Failed to upload image' },
       { status: 500 }

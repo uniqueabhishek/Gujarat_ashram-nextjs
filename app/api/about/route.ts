@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, aboutContent } from '@/lib/db'
+import { eq } from 'drizzle-orm'
 
 export async function GET() {
   try {
-    const content = await prisma.aboutContent.findFirst()
+    const result = await db.query.aboutContent.findFirst()
 
-    if (!content) {
+    if (!result) {
       // Return default content if none exists
       return NextResponse.json({
         id: 'default',
@@ -20,7 +21,7 @@ export async function GET() {
       })
     }
 
-    return NextResponse.json(content)
+    return NextResponse.json(result)
   } catch (error) {
     console.error('Error fetching about content:', error)
     return NextResponse.json(
@@ -33,12 +34,21 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
+    const now = new Date()
 
-    // Delete existing and create new
-    await prisma.aboutContent.deleteMany()
-    const content = await prisma.aboutContent.create({ data })
+    await db.transaction(async (tx) => {
+      // Delete existing
+      await tx.delete(aboutContent)
+      // Create new
+      await tx.insert(aboutContent).values({
+        ...data,
+        createdAt: data.createdAt || now,
+        updatedAt: data.updatedAt || now,
+      })
+    })
 
-    return NextResponse.json(content)
+    const result = await db.query.aboutContent.findFirst()
+    return NextResponse.json(result)
   } catch (error) {
     console.error('Save about content error:', error)
     return NextResponse.json(

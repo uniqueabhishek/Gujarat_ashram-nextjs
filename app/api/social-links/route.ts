@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { db, socialLink } from '@/lib/db'
 
 export async function GET() {
   try {
-    const links = await prisma.socialLink.findMany({
-      orderBy: { order: 'asc' },
+    const links = await db.query.socialLink.findMany({
+      orderBy: (socialLink, { asc }) => [asc(socialLink.order)],
     })
 
     return NextResponse.json(links)
@@ -20,23 +20,24 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const links = await request.json()
+    const now = new Date()
 
-    // Delete existing
-    await prisma.socialLink.deleteMany()
-
-    // Create new links
-    const created = await Promise.all(
-      links.map((link: any, index: number) =>
-        prisma.socialLink.create({
-          data: {
+    const created = await db.transaction(async (tx) => {
+      await tx.delete(socialLink)
+      return await tx
+        .insert(socialLink)
+        .values(
+          links.map((link: any, index: number) => ({
             platform: link.platform,
             url: link.url,
             order: index,
             isActive: link.isActive !== false,
-          },
-        })
-      )
-    )
+            createdAt: now,
+            updatedAt: now,
+          }))
+        )
+        .returning()
+    })
 
     return NextResponse.json(created)
   } catch (error) {

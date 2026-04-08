@@ -1,33 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { unlink } from 'fs/promises'
 import { join } from 'path'
-import { prisma } from '@/lib/prisma'
+import { db, siteImage } from '@/lib/db'
+import { eq } from 'drizzle-orm'
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: idStr } = await params
-    const id = parseInt(idStr)
+    const { id } = await params
+    const imageId = parseInt(id)
 
-    // Get image info
-    const image = await prisma.siteImage.findUnique({ where: { id } })
+    // Find the image first
+    const image = await db.query.siteImage.findFirst({
+      where: (siteImage, { eq }) => eq(siteImage.id, imageId),
+    })
+
     if (!image) {
       return NextResponse.json({ error: 'Image not found' }, { status: 404 })
     }
 
-    // Delete file
+    // Delete physical file (ignore errors)
     try {
-      const filePath = join(process.cwd(), 'public', image.path)
-      await unlink(filePath)
-    } catch (error) {
-      console.error('Error deleting file:', error)
-      // Continue even if file deletion fails
+      await unlink(join(process.cwd(), 'public', image.path))
+    } catch (err) {
+      console.warn('Failed to delete physical file:', err)
     }
 
     // Delete from database
-    await prisma.siteImage.delete({ where: { id } })
+    await db.delete(siteImage).where(eq(siteImage.id, imageId))
 
     return NextResponse.json({ ok: true })
   } catch (error) {
