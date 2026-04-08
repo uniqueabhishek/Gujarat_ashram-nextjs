@@ -3,6 +3,7 @@
 // AdminDashboard.tsx - Complete admin panel migrated to Next.js App Router
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -852,7 +853,7 @@ function AboutEditor({ content, setContent }: AboutEditorProps) {
       {/* SECTION 2: About / Why Visit Section */}
       <div className="mb-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
         <h3 className="font-bold text-lg text-green-900 mb-2 flex items-center gap-2">
-          2️⃣ About Section ("Why Visit")
+          2&num; About Section (&quot;Why Visit&quot;)
         </h3>
         <p className="text-sm text-green-700 mb-4">
           This appears in the middle of the homepage next to the gallery images
@@ -1149,7 +1150,7 @@ function ContactEditor({ items, setItems }: EditorProps<ContactInfo>) {
                  <li>Click the <strong>Share</strong> button</li>
                  <li>Select the <strong>Embed a map</strong> tab</li>
                  <li>Click <strong>Copy HTML</strong></li>
-                 <li>Paste the full code below (we will protectively extract just the source URL automatically on save, or you can paste just the URL inside src="...").</li>
+                 <li>Paste the full code below (we will protectively extract just the source URL automatically on save, or you can paste just the URL inside src=&quot;...&quot;).</li>
                </ol>
              </div>
 
@@ -1169,7 +1170,7 @@ function ContactEditor({ items, setItems }: EditorProps<ContactInfo>) {
              </div>
           </div>
         ) : (
-          <p className="text-sm text-gray-400 italic">No map configured. Click 'Enable Map' to add one.</p>
+          <p className="text-sm text-gray-400 italic">No map configured. Click &apos;Enable Map&apos; to add one.</p>
         )}
       </div>
 
@@ -1389,10 +1390,11 @@ function SortableImage({
       {...listeners}
       onClick={() => onPreview(`${API_BASE}${image.path}`, image.filename)}
     >
-      <img
+      <Image
         src={`${API_BASE}${image.path}`}
         alt={image.filename}
-        className={`w-full h-full object-cover transition-all ${
+        fill
+        className={`object-cover transition-all ${
           isMarkedForDelete ? "grayscale opacity-50" : "group-hover:scale-105"
         }`}
       />
@@ -1667,7 +1669,9 @@ function ImageManager({
       {/* Preview Modal */}
       {previewImage && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4" onClick={() => setPreviewImage(null)}>
-           <img src={previewImage.url} alt="Preview" className="max-w-full max-h-[90vh] object-contain rounded" />
+           <div className="relative w-full h-full">
+             <Image src={previewImage.url} alt="Preview" fill unoptimized className="object-contain rounded" />
+           </div>
         </div>
       )}
     </div>

@@ -13,6 +13,7 @@ import { aboutAPI, infoCardsAPI, eventsAPI, menuItemsAPI, heroButtonsAPI, images
 import { getIconComponent } from '@/lib/iconMapping'
 import { ZenPreloader } from '@/components/ZenPreloader'
 import { TiltCard } from '@/components/TiltCard'
+import Image from 'next/image'
 
 export default function HomePage() {
   const [aboutContent, setAboutContent] = useState<any>(null)
@@ -96,9 +97,13 @@ export default function HomePage() {
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           <div className="flex items-end gap-2">
-            <img
+            <Image
               src="/images/aol-logo-transparent.png"
               alt="Art of Living Logo"
+              width={48}
+              height={48}
+              unoptimized
+              priority
               className={`h-12 w-auto transition-all duration-500 -translate-y-[5px] ${isScrolled ? '' : 'brightness-0 invert'}`}
             />
             <div className="flex flex-col leading-tight">
@@ -534,7 +539,7 @@ export default function HomePage() {
                       </div>
                       <div>
                         <h3 className="font-serif text-3xl font-bold text-ashram-clay">Get in Touch</h3>
-                        <p className="text-ashram-stone/60 text-sm mt-1">We're here to help you on your journey</p>
+                        <p className="text-ashram-stone/60 text-sm mt-1">We&apos;re here to help you on your journey</p>
                       </div>
                     </div>
 
@@ -712,9 +717,12 @@ export default function HomePage() {
 
         {/* Trial 3: Footer Watermark */}
         <div className="absolute bottom-0 right-0 pointer-events-none opacity-20 md:opacity-80">
-          <img
+          <Image
             src="/images/ashram-sketch-transparent.png"
             alt="Ashram Watermark"
+            width={500}
+            height={400}
+            unoptimized
             className="w-[300px] md:w-[500px] h-auto translate-x-1/4 translate-y-1/4 brightness-0 invert"
           />
         </div>
@@ -730,7 +738,7 @@ export default function HomePage() {
                  viewport={{ once: true }}
               >
                 <div className="flex items-end gap-4 mb-6">
-                   <img src="/images/aol-logo-transparent.png" alt="Logo" className="h-16 w-auto brightness-0 invert opacity-90 -translate-y-[2px]" />
+                   <Image src="/images/aol-logo-transparent.png" alt="Logo" width={64} height={64} unoptimized className="h-16 w-auto brightness-0 invert opacity-90 -translate-y-[2px]" />
                    <div>
                      <p className="text-xs uppercase tracking-widest text-[#F59E0B] font-bold mb-1">The Art of Living</p>
                      <h3 className="text-3xl font-serif font-bold leading-none">{aboutContent?.footerTitle || 'Sri Sri Gujarat Ashram'}</h3>
@@ -825,9 +833,12 @@ export default function HomePage() {
               className="relative w-auto h-auto max-w-full max-h-[90vh]"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
+              <Image
                 src={selectedImage}
                 alt="Full size"
+                width={1200}
+                height={800}
+                unoptimized
                 className="w-auto h-full max-h-[90vh] object-contain rounded-lg shadow-2xl mx-auto"
               />
               <button
