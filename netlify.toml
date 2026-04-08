@@ -1,6 +1,5 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+  command = "npx prisma generate && npm run build"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -9,11 +8,7 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
 
-# Redirect rules for Next.js
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Next.js handles routing, no redirects needed when using @netlify/plugin-nextjs
 
 # Security headers
 [[headers]]
