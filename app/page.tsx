@@ -747,6 +747,7 @@ export default function HomePage() {
             width={500}
             height={400}
             unoptimized
+            style={{ height: 'auto' }}
             className="w-[300px] md:w-[500px] h-auto translate-x-1/4 translate-y-1/4 brightness-0 invert"
           />
         </div>

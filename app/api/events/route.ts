@@ -23,15 +23,21 @@ export async function POST(request: NextRequest) {
     const events = Array.isArray(data) ? data : [data]
     const now = new Date()
 
-    const eventsWithTimestamps = events.map((e: any) => ({
-      ...e,
-      createdAt: e.createdAt || now,
-      updatedAt: e.updatedAt || now,
-    }))
+    const eventsWithTimestamps = events.map((e: any) => {
+      const { id, createdAt, updatedAt, ...rest } = e;
+      return {
+        ...rest,
+        createdAt: createdAt ? new Date(createdAt) : now,
+        updatedAt: updatedAt ? new Date(updatedAt) : now,
+      };
+    })
 
     const created = await db.transaction(async (tx) => {
       await tx.delete(event)
-      return await tx.insert(event).values(eventsWithTimestamps).returning()
+      if (eventsWithTimestamps.length > 0) {
+        return await tx.insert(event).values(eventsWithTimestamps).returning()
+      }
+      return []
     })
 
     return NextResponse.json(created)
