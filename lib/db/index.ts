@@ -8,10 +8,22 @@ if (!databaseUrl) {
   throw new Error('DATABASE_URL environment variable is not set')
 }
 
-// Create PostgreSQL client
-const client = postgres(databaseUrl)
+// Singleton pattern: reuse the connection across Next.js HMR reloads in dev.
+// Without this, every hot-reload creates a new TCP/TLS/auth roundtrip → 3-4s cold starts.
+declare global {
+  // eslint-disable-next-line no-var
+  var __db: ReturnType<typeof drizzle> | undefined
+}
 
-// Create Drizzle instance with all schema tables
-export const db = drizzle(client, { schema })
+function createDb() {
+  const client = postgres(databaseUrl!, {
+    max: 3,             // small pool; enough for concurrent API routes
+    idle_timeout: 30,   // release idle connections after 30s
+    connect_timeout: 10, // fail fast if DB unreachable
+  })
+  return drizzle(client, { schema })
+}
+
+export const db = globalThis.__db ?? (globalThis.__db = createDb())
 
 export * from './schema'
