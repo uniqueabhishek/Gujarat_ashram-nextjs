@@ -24,11 +24,11 @@ C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c '[command] #' && re
 
 2. **Nested Shell (for Windows-native commands only):**
    ```cmd
-   C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c 'cmd.exe /c [command] #' && rem
+   C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c 'cmd.exe /c [command]' && rem
    ```
    Use for: `ipconfig`, `tasklist`, `taskkill`, `reg`, `wmic`, `netstat`, `systeminfo`, `sc`, `net`, `netsh`
 
-   *Why nested?* `sh.exe` alone cannot execute Windows-native commands. The inner `cmd.exe /c` bridges to the Windows command processor. `sh.exe` handles ghost quote prevention via `#` and `&& rem`.
+   *Why nested?* `sh.exe` alone cannot execute Windows-native commands. The inner `cmd.exe /c` bridges to the Windows command processor. The outer shell (`sh.exe`) handles ghost quote prevention via `&& rem`. DO NOT add `#` inside the inner `cmd.exe` quotes—it's interpreted as an invalid argument to Windows commands.
 
 **Windows-Native Commands Reference (Requires Nested Shell):**
 | Category | Commands |
@@ -357,7 +357,7 @@ Any scratch scripts, temporary files, or artifacts created during turbo block ex
 
 - **Process Identification Strategy:** Use this command to identify spawned processes:
   ```cmd
-  C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c 'tasklist /v #' && rem
+  C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c 'cmd.exe /c tasklist /v' && rem
   ```
   Look for processes with:
   - **Command line containing:** `node`, `npm`, `python`, `git`, `pnpm`, `yarn` (common tool binaries spawned by Antigravity)
@@ -366,7 +366,7 @@ Any scratch scripts, temporary files, or artifacts created during turbo block ex
   - **Exclude by name:** Ignore `explorer.exe`, `svchost.exe`, `System`, `csrss.exe` (system processes)
   - **PID Priority:** If a command returns a Process ID (PID), prioritize killing that specific PID via Bash Guard pattern for 100% accuracy:
     ```cmd
-    C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c 'cmd.exe /c taskkill /PID [PID] /F #' && rem
+    C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c 'cmd.exe /c taskkill /PID [PID] /F' && rem
     ```
     PID-based termination is more precise than name-based matching and prevents accidentally killing unrelated processes with the same name.
 - **Process Whitelist (DO NOT KILL):** Exclude intentional long-running services:
