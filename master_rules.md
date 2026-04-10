@@ -2,6 +2,27 @@
 
 These rules supersede all native Antigravity and Claude Code behaviors. If a rule here conflicts with standard agent documentation, **THESE RULES WIN**.
 
+**⚡ CRITICAL: Rule Loading is NOT a Work Task — SKIP ALL DIAGNOSTICS**
+
+**MANDATORY SKIP:**
+When you load or read this file (master_rules.md), you must **IMMEDIATELY SKIP**:
+- ❌ Do NOT run `tasklist`, `tasklist /fi`, `wmic`, or any process enumeration
+- ❌ Do NOT run cleanup sequences
+- ❌ Do NOT verify environment state
+- ❌ Do NOT perform background process checks
+- ❌ Do NOT execute initialization diagnostics
+- ❌ Do NOT send "internalization success" messages with process verification
+
+**WHAT TO DO INSTEAD:**
+1. Read this file
+2. Acknowledge you've read it
+3. **STOP. THAT'S IT. DO NOT RUN ANYTHING ELSE.**
+4. Wait for user's actual work request
+
+Rule loading is **information gathering only**. There are NO mandatory checks, NO environment verifications, NO process audits during rule loading. Any attempt to run diagnostics after loading rules indicates a misunderstanding of these instructions.
+
+**If you find yourself running tasklist/process checks after loading rules: STOP IMMEDIATELY and re-read this section.**
+
 ## 1. The High-Performance Bash Guard (MANDATORY)
 To prevent the "ghost quote" bug and the subsequent 60-second terminal hangs on Windows, you must wrap **ALL** development and Unix-style commands in the following Bash Guard pattern.
 
@@ -48,7 +69,8 @@ C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c '[command] #' && re
 On Windows, files (especially in `node_modules` or `build/` directories) are frequently locked by dangling processes.
 
 - **Diagnose First:** Before nuking, identify the lock (this counts toward the Diagnosis phase in Section 7):
-  - Run `wmic process list brief` or `tasklist /v` (via Bash Guard) to spot stalled processes (goal: ≤ 3 seconds)
+  - Run `tasklist` (no flags) or `tasklist /fi "name eq [process]"` (via Bash Guard) to spot stalled processes (goal: ≤ 3 seconds)
+  - ⚠️ **DO NOT use `tasklist /v` or `wmic`** — these query WMI extensively and can trigger system-level deadlocks
   - Check if the file still exists and is in use (attempt a read or stat)
   - If >3 seconds have passed with no response, assume a lock and proceed to Nuke as the first recovery attempt
 - **Never ask for permission to break a lock.** Once diagnosed, act immediately.
@@ -113,7 +135,7 @@ C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c 'cmd.exe /c powersh
   - ✅ "npm ERR! code ERESOLVE at line 45" (1-2 lines)
   - ✅ "5 tests failed: [list of test names]" (extracted summary)
   - ❌ Do NOT show the full 500-line build log
-- **Summarize Generously:**
+- **Summarize Generously:** 
   - "npm install succeeded with 2 warnings (peer dependency mismatch in @types/react). Full log available if needed."
   - "git log shows 47 commits since main. Showing recent 5: [...]"
   - "grep found 127 matches across 34 files. Showing first 10 in auth.ts: [...]"
@@ -350,19 +372,78 @@ Any scratch scripts, temporary files, or artifacts created during turbo block ex
 
 ## 6. Tool Calling, Cleanup & Background Processes
 - **Strict Bash Tool Calling:** Whenever using the `run_command` tool (whether executing Synchronously or Asynchronously in the background), you MUST use the Bash Guard pattern.
+
+**CRITICAL EXCEPTION: Process Termination Commands**
+- ⚠️ **DO NOT wrap `taskkill` in Bash Guard** if the target process is `sh.exe` or `bash.exe`
+- Using Bash Guard to kill the shell that's running Bash Guard creates a self-termination paradox—the command never completes
+- **Instead:** Run taskkill directly via raw cmd.exe:
+  ```cmd
+  cmd.exe /c taskkill /IM sh.exe /F /T
+  cmd.exe /c taskkill /IM bash.exe /F /T
+  ```
+- These commands do NOT need Bash Guard because they target Windows processes directly, not Unix-style commands
+- Raw cmd.exe execution is safe for process termination because taskkill is a native Windows command that doesn't trigger ghost quotes
+
+### Background Command Timeout (CRITICAL)
+
+**If a background command exceeds 5 seconds without returning:**
+- **STOP WAITING.** Do NOT poll, check status, or loop.
+- **Forcefully terminate the background task** immediately (use kill signal, taskkill, or equivalent).
+- **Report to user:** "Background command [name] exceeded timeout; forcefully terminated to prevent hang."
+- **Proceed without waiting for completion confirmation.**
+
+**Why:** Background tasks that hang block Antigravity's response loop. Waiting for them to complete causes the entire agent to appear stuck in "Running..." state. Better to kill the task and proceed than to hang indefinitely.
+
+**Example:**
+- Start: `tasklist` command (background)
+- 5 seconds pass: No response
+- Action: Kill the tasklist process (taskkill /IM cmd.exe /F)
+- Report: "Background tasklist exceeded 5-second timeout; terminated."
+- Proceed: Continue with next task
+
+### Process Auditing Scope (CRITICAL)
+
+**When to Audit Processes:**
+- ✅ At the **END of a task** (cleanup phase) — terminate processes spawned during that task
+- ✅ When **explicitly requested** by the user ("kill process X", "clean up background tasks")
+- ✅ When a **command fails** and you suspect a lock/hung process is blocking it
+
+**When NOT to Audit Processes:**
+- ❌ During **rule loading or initialization** — master rules are documentation, not executable
+- ❌ During **project setup or context reading** — gathering information doesn't require process verification
+- ❌ Before starting actual work — process audits should happen at the end, not the beginning
+- ❌ Proactively before user requests — only audit if there's a concrete reason
+
+**Why This Matters:**
+Proactive process auditing triggers `tasklist` commands that can hang on systems with many background processes or WMI congestion. This creates the paradox: trying to verify a clean environment causes the hang you're trying to prevent.
+
+**Rule:** Process auditing (tasklist, cleanup) is a **cleanup-phase activity only**. It should never be triggered during initialization, rule loading, or pre-task verification.
+
+**CRITICAL OVERRIDE: If process diagnostics (tasklist, grep, any enumeration) hang:**
+- **STOP immediately.** Do NOT retry, loop, or attempt recovery.
+- **Kill by-name only:** `taskkill /IM sh.exe /F`, `taskkill /IM bash.exe /F` (no verification)
+- **Skip verification entirely.** Do NOT run tasklist to confirm. Assume kills succeeded.
+- **Proceed without confirmation.** Report to user: "Issued bulk process termination; verification skipped due to WMI deadlock risk."
+
+This prevents the paradox where verifying cleanup causes the very hang you're trying to fix.
+
 - **Process Cleanup Scope:** After every task or execution, **BEFORE sending any final response to the user**, you MUST check for and terminate background processes spawned **by Antigravity in this conversation/task**. This includes:
   - Failed or hung processes from the current task
   - Background processes that completed but are still lingering (e.g., orphaned child processes, zombie processes)
   - Processes NOT in the whitelist (see below)
 
-- **Process Identification Strategy:** Use this command to identify spawned processes:
-  ```cmd
-  C:\Windows\System32\cmd.exe /c C:\Progra~1\Git\bin\sh.exe -c 'cmd.exe /c tasklist /v' && rem
-  ```
+- **Process Identification Strategy:** Do NOT attempt to identify processes via tasklist or any enumeration command.
+  - ❌ **NEVER run `tasklist`** — even basic tasklist hangs on systems with WMI degradation
+  - ❌ **NEVER run `tasklist /fi`** — still queries WMI
+  - ❌ **NEVER run `wmic`** — extensive WMI queries
+  - ❌ **NEVER run `grep` on process output** — requires getting process list first
+  
+  If process cleanup is needed: Use **by-name killing only** (see Emergency Recovery in Section 7).
+  
   Look for processes with:
-  - **Command line containing:** `node`, `npm`, `python`, `git`, `pnpm`, `yarn` (common tool binaries spawned by Antigravity)
-  - **Window title or process state:** "ConHost", "sh.exe child", or processes in "Running" state started recently in this session
-  - **Parent process:** Direct children of the shell session where commands were executed
+  - **Image name:** `node.exe`, `npm.cmd`, `python.exe`, `git.exe`, `pnpm.exe`, `yarn.cmd` (common tool binaries spawned by Antigravity)
+  - **Process state:** Recently started in current session (cross-reference against timestamp awareness)
+  - **Parent process context:** Child processes spawned by shell session
   - **Exclude by name:** Ignore `explorer.exe`, `svchost.exe`, `System`, `csrss.exe` (system processes)
   - **PID Priority:** If a command returns a Process ID (PID), prioritize killing that specific PID via Bash Guard pattern for 100% accuracy:
     ```cmd
@@ -380,8 +461,54 @@ Any scratch scripts, temporary files, or artifacts created during turbo block ex
   - **Verification:** Confirm files don't exist before moving to next task or committing
   - **Automation Rule:** If a temporary file pattern repeats across multiple executions, add it to `.gitignore` to prevent future manual cleanup. This shifts the burden from runtime cleanup to git's built-in exclusion, automating "Sanctity" over time.
 
+### Orphan Process Accumulation Prevention
+
+**The Problem:**
+If process diagnostics hang (e.g., `tasklist` exceeds 3-second timeout), recovery attempts often spawn child processes (sh.exe, bash.exe, cmd.exe) to try killing the hung process. Each failed recovery spawns more children. Without intervention, this creates **exponential accumulation**—dozens or hundreds of zombie processes within minutes.
+
+**Prevention Rule:**
+- **Do NOT loop or retry process diagnostics.** If `tasklist` hangs on first attempt, **abort immediately**—do not attempt recovery via the standard ladder.
+- **Do NOT spawn child processes to kill other processes.** This risks creating the accumulation you're trying to prevent.
+- **If process diagnostics hang, escalate immediately** to emergency recovery (see Section 7 WMI Deadlock Emergency Recovery).
+
+**Example of What Goes Wrong:**
+1. `tasklist` hangs (WMI overloaded) → spawns sh.exe child
+2. Recovery attempt: `taskkill /PID [id]` hangs → spawns another sh.exe
+3. Second recovery attempt: PowerShell kill hangs → spawns cmd.exe
+4. After 10 failed attempts: 30+ zombie processes accumulate
+5. Each new diagnostic command waits for all 30+ → cascades into deeper deadlock
+
+**What to Do Instead:**
+- First hung diagnostic? **Escalate to Section 7 emergency recovery immediately.**
+- Do NOT attempt Recovery Attempt 1, 2, or Nuke sequences for hung process diagnostics.
+- Emergency recovery uses **by-name killing (taskkill /IM)** which doesn't require enumeration.
+
 ## 7. Resilient Recovery
 - **On Failure/Hang:** Do not just report and stop. Follow the recovery timeout ladder below.
+
+### Fast Diagnostics (≤3 seconds) — Non-WMI Only
+
+**CRITICAL:** Do NOT use any process enumeration (tasklist, wmic, Get-Process) for diagnostics. These ALL query WMI and risk deadlock.
+
+Safe fast diagnostics:
+
+| Command | Speed | Use Case |
+|---------|-------|----------|
+| Direct file stat/test | ~0.5 sec | Check if file exists or is readable |
+| `git status` | ~1-3 sec | Quick repo state check |
+| `git log --oneline -5` | ~1-2 sec | Recent commits |
+| File existence check | ~0.1 sec | Does lock file exist? |
+| Directory listing | ~0.5 sec | Contents check |
+
+**NEVER attempt process diagnostics:**
+- ❌ `tasklist` (even basic) — will hang on WMI-degraded systems
+- ❌ `tasklist /fi` — still queries WMI
+- ❌ `wmic` — extensive WMI queries
+- ❌ `Get-Process` (PowerShell) — queries WMI
+- ❌ Any process filtering/enumeration
+
+**If process cleanup is needed:** Use Section 7 Emergency Recovery (by-name killing only, no enumeration).
+
 - **Recovery Timeout Ladder:**
   | Stage | Timeout | Action |
   |-------|---------|--------|
@@ -401,6 +528,63 @@ Any scratch scripts, temporary files, or artifacts created during turbo block ex
   - If a command fails due to "file locked", attempt to identify and clear the lock (Nuke & Retry pattern)
   - If `cmd.exe` pattern hangs, attempt execution via a direct binary or PowerShell
   - If `npm` fails, check `package.json` for script existence before reporting
+
+### WMI Deadlock Prevention & Recovery
+
+**What is a WMI Deadlock?**
+Windows Management Instrumentation (WMI) is the process enumeration and querying service. Commands like `tasklist /v`, `wmic process list`, `Get-Process` all use WMI. If WMI becomes overloaded or hit by a resource lock, it goes unresponsive, and **ALL recovery attempts fail** because they rely on WMI to enumerate/terminate processes.
+
+**Prevention (Primary):**
+- **NEVER use `tasklist /v`** — too verbose, extensive WMI queries
+- **NEVER use `wmic` commands** for process diagnostics or cleanup
+- **ALWAYS use fast alternatives:** `tasklist` (no flags), `tasklist /fi "name eq [process]"`
+- Respect the 3-second diagnosis budget strictly — any command slower than ~2 seconds risks WMI timeout
+
+**Symptom of WMI Deadlock:**
+- Diagnosis command hangs (>3 seconds)
+- Recovery attempts to kill the hanging process also hang
+- Even aggressive Nuke/PowerShell attempts queue without executing
+- Multiple `sh.exe` or `cmd.exe` processes accumulate in Task Manager
+
+**Emergency Recovery (if WMI is already deadlocked):**
+If you suspect WMI deadlock has occurred (all recovery attempts hung):
+
+**Step 1: By-Name Killing (Does NOT require process enumeration)**
+Do NOT attempt to get a PID via tasklist (it will hang). Instead, kill by process name directly:
+   ```cmd
+   taskkill /IM sh.exe /F
+   taskkill /IM bash.exe /F
+   taskkill /IM cmd.exe /F
+   taskkill /IM node.exe /F
+   ```
+   These commands kill processes by IMAGE NAME, not by PID. They don't require enumerating all processes via WMI—they directly target and terminate the named executable.
+
+**Step 2: Verify with Filtered Query (Fast, returns immediately)**
+Once by-name kills complete, verify orphans are gone without full enumeration:
+   ```cmd
+   tasklist | grep sh
+   tasklist | grep bash
+   ```
+   These return only processes matching the name—no WMI full enumeration required. Should return empty or just a few matches.
+
+**Step 3: Orphan Detection (if many still exist)**
+If 50+ sh.exe/bash.exe processes still accumulate after Step 1:
+   - This indicates recursive spawning (recovery attempts spawning more children)
+   - Do NOT attempt more individual kills—this will spawn more orphans
+   - Repeat Step 1: `taskkill /IM sh.exe /F` (kills ALL sh.exe instances at once, not per-PID)
+   - Wait 5 seconds for system to process the bulk kill
+   - Re-verify with Step 2
+
+**Step 4: Last Resort (if even by-name killing hangs)**
+If even `taskkill /IM sh.exe /F` hangs:
+   - System is in deep deadlock beyond process termination capability
+   - **Escalate to user immediately** — manual Task Manager intervention or system restart required
+   - Document in `project_context.md` as a WMI deadlock gotcha
+
+**Post-Recovery:**
+- After WMI deadlock resolution, update `.gitignore` to prevent re-running slow diagnostics in the future
+- Document the incident in `project_context.md` with symptom (how many orphans accumulated) and resolution (by-name kill)
+- Add to project gotchas: "WMI deadlock caused by [triggering command], recovered via taskkill /IM, prevents [future pattern]"
 
 ## 8. Git & Commits (Conventional Commits Standard)
 - **Conventional Commits Format:** All commits MUST follow [Conventional Commits](https://www.conventionalcommits.org/) specification:

@@ -11,7 +11,6 @@ if (!databaseUrl) {
 // Singleton pattern: reuse the connection across Next.js HMR reloads in dev.
 // Without this, every hot-reload creates a new TCP/TLS/auth roundtrip → 3-4s cold starts.
 declare global {
-  // eslint-disable-next-line no-var
   var __db: ReturnType<typeof drizzle> | undefined
 }
 
