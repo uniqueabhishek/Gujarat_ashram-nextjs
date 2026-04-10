@@ -1,4 +1,4 @@
-import { drizzle } from 'drizzle-orm/postgres-js'
+import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import * as schema from './schema'
 
@@ -11,7 +11,7 @@ if (!databaseUrl) {
 // Singleton pattern: reuse the connection across Next.js HMR reloads in dev.
 // Without this, every hot-reload creates a new TCP/TLS/auth roundtrip → 3-4s cold starts.
 declare global {
-  var __db: ReturnType<typeof drizzle> | undefined
+  var __db: PostgresJsDatabase<typeof schema> | undefined
 }
 
 function createDb() {

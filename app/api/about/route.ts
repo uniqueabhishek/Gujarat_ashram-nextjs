@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     const data = await request.json()
     const now = new Date()
 
-    await db.transaction(async (tx) => {
+    await db.transaction(async (tx: any) => {
       // Delete existing
       await tx.delete(aboutContent)
       // Create new
